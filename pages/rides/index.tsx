@@ -9,7 +9,7 @@ import { contract, ABI, RPC } from '../../contracts'
 import { ActivityType, UserType } from '../../utils/interfaces'
 import { add } from 'date-fns'
 import { opacityAnimation } from '../../utils/animations'
-import UserActivity from '../../components/UserActivity'
+import AllRides from '../../components/AllRides'
 const DashboardPage: NextPage = () => {
   const { address, isConnected } = useAccount()
   const router = useRouter()
@@ -17,7 +17,7 @@ const DashboardPage: NextPage = () => {
   const [Loading,setLoading] = useState(true)
   const { chain } = useNetwork()
   const { switchNetwork } = useSwitchNetwork()
-  const [userActivities,SetUserActivities] = useState<ActivityType[]>([])
+  const [allActiveRides,setActiveRides] = useState<ActivityType[]>([])
 
   const checkUser = async ()=> {
     if(!isConnected) return router.push('./login');
@@ -35,8 +35,11 @@ const DashboardPage: NextPage = () => {
     if(!isUser) return router.push('./login')
     // console.log(isUser)
     let getUser = await carContract.userInfo(address)
-    let getUserActivities = await carContract.getUserActivities(address);
-    SetUserActivities(getUserActivities)
+    let isActiveRide = await carContract.isActiveRide(address)
+    if((getUser?.role).toNumber() !== 2) return router.push(`../dashboard`)
+    if(isActiveRide) return router.push('..rides/active')
+    let activeRides = await carContract.getActiveRides();
+    setActiveRides(activeRides)
     setUserInfo(getUser)
     setLoading(false)
     }
@@ -44,8 +47,54 @@ const DashboardPage: NextPage = () => {
     
     // console.log(FilteredActivities)
 
-    
-    // console.log(userActivities)
+    const onSwitchNetwork = async () => {
+    await switchNetwork?.(chainId.polygonMumbai)
+  }
+
+    const handleRide = async (ride:ActivityType) => {
+        const {id, status } = ride;
+        const ethereum = (window as any).ethereum
+        const accounts = await ethereum.request({
+        method: 'eth_requestAccounts',
+        })
+        if(chain?.id !== chainId?.polygonMumbai) {
+            await onSwitchNetwork()
+        }
+        let provider = new ethers.providers.Web3Provider(ethereum)
+        // const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai)
+
+        const walletAddress = address // first account in MetaMask
+        const signer = provider.getSigner(walletAddress)
+
+        // console.log(signer)
+        const carContract = new ethers.Contract(contract, ABI, signer)
+
+        const isUser = await carContract.is_user(address)
+        if(!isUser) return console.log("user account not exist")
+        console.log(isUser)
+        let rideId = id.toNumber()
+        let getUser = await carContract.userInfo(address)
+
+
+        if((getUser?.role).toNumber() == 2 && status.toNumber() == 1) {
+            const accept = await carContract.AcceptRide(rideId)
+        .then((tx: any) => {
+          console.log('processing')
+          provider.waitForTransaction(tx.hash).then(()=> {
+            console.log("Ride Accepted")
+            router.push('../rides/active')
+          })
+        })
+        .catch((e: { message: any }) => {
+        console.log(e.message)
+        return
+        })
+        } 
+        
+        
+    }
+
+    // console.log(allActiveRides)
     useEffect(()=> {
       if (window.ethereum) {
         (window as any).ethereum.on('accountsChanged', function (accounts:any) {
@@ -63,6 +112,7 @@ const DashboardPage: NextPage = () => {
 
   return (
     <main className="p-4 pt-6 lg:px-16 min-h-screen">
+       {Loading && <p className='text-center'>Loading...</p>}
        {userInfo.name && !Loading && 
        <>
        
@@ -79,7 +129,7 @@ const DashboardPage: NextPage = () => {
               }}
             >
        <div>
-        <h1 className="text-2xl font-bold ">User Dashboard</h1>
+        <h1 className="text-2xl font-bold ">All Available Rides</h1>
         <br></br>
         {/* <ul>
             <li>User Id: {`${(userInfo?.user_id)?.toNumber()}`}</li>
@@ -93,9 +143,11 @@ const DashboardPage: NextPage = () => {
         </div>
         <br></br>
         {/* <p>Account setting</p> */}
-        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./setting')}}>Account Setting</button>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./account')}}>My Account</button>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./dashboard')}}>Dashboard</button>
        </motion.div>
-       <UserActivity userActivities={userActivities}/>
+       <br></br>
+       <AllRides userActivities={allActiveRides} handleRide={handleRide}/>
        </>
        }
     </main>

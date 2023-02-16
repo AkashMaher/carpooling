@@ -1,4 +1,4 @@
-export const contract = "0x883385c8d697d93AFCe137C36ceB5CC5C51a89d7"
+export const contract = "0xf0A6e2190e16c8E815Fe456f81d55097DDB7FAB0"
 
 export const ABI = [
 	{
@@ -10,13 +10,7 @@ export const ABI = [
 			}
 		],
 		"name": "AcceptRide",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
@@ -88,14 +82,27 @@ export const ABI = [
 			}
 		],
 		"name": "approveRide",
-		"outputs": [
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
 			{
-				"internalType": "string",
+				"internalType": "address",
 				"name": "",
-				"type": "string"
+				"type": "address"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"name": "balance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -107,13 +114,7 @@ export const ABI = [
 			}
 		],
 		"name": "cancelRide",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
 	},
@@ -126,13 +127,14 @@ export const ABI = [
 			}
 		],
 		"name": "cancelRideByDriver",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claim",
+		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
 	},
@@ -381,13 +383,7 @@ export const ABI = [
 			}
 		],
 		"name": "requestRide",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
 	},
@@ -425,13 +421,7 @@ export const ABI = [
 			}
 		],
 		"name": "updateUser",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
+		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},

@@ -114,7 +114,6 @@ const SettingPage: NextPage = () => {
     const [checkIfNewUser,setIfNewUser] = useState(false)
     const [userInfo,setUserInfo] = useState<any>([])
 
-    console.log(isConnected)
     const checkUser = async ()=> {
         if(!isConnected) return router.push('../login');
         if(!address) {
@@ -138,6 +137,7 @@ const SettingPage: NextPage = () => {
         }
         if(!isUser) return router.push('../login')
         let getUser = await carContract.userInfo(address)
+        if((getUser?.role).toNumber() !== 1) return router.push('../rides')
         setUserInfo(getUser)
         setUser(isUser)
         setLoading(false)
@@ -197,7 +197,7 @@ const SettingPage: NextPage = () => {
           console.log('processing')
           provider.waitForTransaction(tx.hash).then(()=> {
             console.log("New Ride Requested")
-            router.push('../rides')
+            router.push('../rides/active')
           })
         })
         .catch((e: { message: any }) => {

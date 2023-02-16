@@ -55,11 +55,16 @@ const AccountPage: NextPage = () => {
     await switchNetwork?.(chainId.polygonMumbai)
   }
     
-
+  let time= ''
+    if ((userInfo?.time)) {
+        let d = new Date((userInfo?.time).toNumber()*1000)
+        time = d.toLocaleString()
+    }
 
 
   return (
     <main className="p-4 pt-6 lg:px-16 min-h-screen">
+      {Loading && <p className='text-center'>Loading...</p>}
        {userInfo.name && !Loading && 
        <>
        
@@ -86,10 +91,12 @@ const AccountPage: NextPage = () => {
             <li>Email Id: {userInfo?.email}</li>
             <li>Age: {(userInfo?.age)?.toNumber()}</li>
             <li>Role: {(userInfo?.role)?.toNumber()==2?"Driver":(userInfo.role)?.toNumber()==1?"Traveller":''}</li>
+            <li>Account Created At : {time}</li>
         </ul>
         </div>
         <br></br>
-        <p>Account Setting </p>
+        <p></p>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./dashboard')}}>Dashboard</button>
         <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./setting')}}>Account Setting</button>
        </motion.div>
        </>

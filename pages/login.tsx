@@ -146,7 +146,7 @@ const ConnectPage: NextPage = () => {
         await checkUser();
     }
 
-    console.log(isConnected)
+    // console.log(isConnected)
     const checkUser = async ()=> {
         if(!address) {
             setLoading(false)
@@ -205,7 +205,7 @@ const ConnectPage: NextPage = () => {
 
         const isUser = await carContract.is_user(address)
         if(isUser) return console.log("user already exist")
-        console.log(isUser)
+        // console.log(isUser)
         const createAccount = await carContract.createUser(name, age, gender, phone, email, role)
         .then((tx: any) => {
           console.log('processing')
@@ -243,7 +243,7 @@ const ConnectPage: NextPage = () => {
     <>
     
     <main className="p-4 pt-6 lg:px-16 min-h-screen">
-        {Loading && <p>Loading...</p>}
+        {Loading && <p className='text-center'>Loading...</p>}
         {!Loading && 
         <div>
             <h1 className="text-2xl font-bold ">{!isConnected?"Login with metamask":checkIfNewUser?"Sign Up":'Login'}</h1>

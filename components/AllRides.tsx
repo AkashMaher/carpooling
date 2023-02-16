@@ -4,15 +4,15 @@ import { FC, useEffect, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useAccount } from 'wagmi'
 import { ActivityType, UserType } from '../utils/interfaces'
-// import { QUERIES } from '../react-query/constants'
-// import { getUser, getUserActivity } from '../react-query/queries'
+
 import { shortenString } from '../utils'
 import { opacityAnimation } from '../utils/animations'
 import Pagination from './Pagination'
 const ActivityItem: FC<{
   activity: ActivityType
   index: number
-}> = ({ activity, index }) => {
+  handleRide:(ride:ActivityType)=> void
+}> = ({ activity, index, handleRide }) => {
   const router = useRouter()
   const { address: connectedAddress } = useAccount()
 
@@ -33,13 +33,13 @@ const ActivityItem: FC<{
 
   const activityData = [
     { name: 'Ride ID', value:(activity?.id).toNumber()},
-    { name: 'Event' , value:eventIn ==1?"Requested":eventIn ==2?"Cancelled":eventIn==3?"Accepted":eventIn==4?"Completed":eventIn==5?"X By Driver":''},
-    // { name: 'Distance', value: distance},
+    { name: 'Distance', value: distance},
     { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
-    // { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
-    { name: 'Cost',value:CostPerKM*distance },
+    { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
+    { name: 'CostPerKM',value:CostPerKM },
     { name: 'From',value:activity?.from },
     { name: 'To',value:activity?.to },
+    {name: 'Accept',value:'Accept'}
   ]
 
   const onClickAddress = (address: string) => {
@@ -47,6 +47,8 @@ const ActivityItem: FC<{
       let url = `https://${explorer}/address/${address}`
       window.open(url, '_blank')
   }
+
+  
 
   return (
     <motion.tr
@@ -69,13 +71,13 @@ const ActivityItem: FC<{
           className={activityData?.name === 'Traveller' ||
             (isTo && activityData?.name === 'Driver')
               ? 'cursor-pointer underline hover:text-sky-500'
-              : 'h-16'}
+              : activityData?.name === 'Accept'?'cursor-pointer underline hover:text-green-500':'h-16'}
           onClick={() =>
             activityData?.name === 'Traveller'
               ? onClickAddress(activity?.traveller)
               : isTo && activityData?.name === 'Driver'
               ? onClickAddress(activity?.driver)
-              : ''
+              : activityData?.name === 'Accept'?handleRide(activity):''
           }
         >
           {activityData?.value}
@@ -97,7 +99,7 @@ const INITIAL_ACTIVITY_STATE: InitialActivityStateType = {
   currentPage: 1,
 }
 
-const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) => {
+const AllRides: FC<{ userActivities:ActivityType[], handleRide:(ride:ActivityType)=> void}> = ({ userActivities,handleRide }) => {
 
     const [{ activity, totalPages, currentPage }, setActivityState] = useState(
     INITIAL_ACTIVITY_STATE
@@ -110,15 +112,14 @@ const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) 
 
   const tableHeadings = [
     { name: 'Ride ID'},
-    { name: 'Event' },
-    // { name: 'Distance' },
+    { name: 'Distance' },
     { name: 'Driver' },
-    // { name: 'Traveller' },
-    { name: 'Cost' },
+    { name: 'Traveller' },
+    { name: 'CostPerKM' },
     { name: 'From' },
     { name: 'To' },
+    { name: 'Accept'}
   ]
-
   return (
     <>
       <div
@@ -147,6 +148,7 @@ const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) 
                       <ActivityItem
                         key={index}
                         activity={activity}
+                        handleRide={handleRide}
                         index={index}
                       />
                     )
@@ -158,7 +160,7 @@ const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) 
             ''
           )}
           {!activity && (
-            <p className="text-center b text-3xl p-12">- No Activities yet -</p>
+            <p className="text-center b text-3xl p-12">- No Available Rides -</p>
           )}
         </div>
       </div>
@@ -173,4 +175,4 @@ const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) 
   )
 }
 
-export default UserActivity
+export default AllRides
