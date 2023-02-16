@@ -1,22 +1,50 @@
 {
-  "name": "my-app",
+  "name": "ngm-marketplace",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "^14.15.0 || ^16.10.0 || ^18.12.0",
+    "yarn": ">=1.22.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
   },
   "dependencies": {
-    "@types/node": "18.11.9",
-    "@types/react": "18.0.25",
-    "@types/react-dom": "18.0.8",
-    "eslint": "8.27.0",
-    "eslint-config-next": "13.0.2",
-    "next": "13.0.2",
+    "@react-oauth/google": "^0.5.0",
+    "axios": "^1.1.3",
+    "chart.js": "^3.9.1",
+    "date-fns": "^2.29.3",
+    "ethers": "^5.7.2",
+    "framer-motion": "^7.3.6",
+    "next": "12.3.0",
     "react": "18.2.0",
+    "react-chartjs-2": "^4.3.1",
     "react-dom": "18.2.0",
-    "typescript": "4.8.4"
+    "react-icons": "^4.4.0",
+    "react-query": "^3.39.2",
+    "react-toastify": "^9.1.0",
+    "wagmi": "^0.7.15"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.1.2",
+    "@commitlint/config-conventional": "^17.1.0",
+    "@types/node": "18.7.18",
+    "@types/react": "18.0.20",
+    "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.11",
+    "eslint": "8.23.1",
+    "eslint-config-next": "12.3.0",
+    "eslint-config-prettier": "^8.5.0",
+    "husky": "^8.0.1",
+    "postcss": "^8.4.16",
+    "prettier": "^2.7.1",
+    "tailwind-scrollbar": "^2.0.1",
+    "tailwindcss": "^3.1.8",
+    "typescript": "4.8.3"
   }
 }
