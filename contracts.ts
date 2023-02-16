@@ -1,4 +1,4 @@
-export const contract = "0xf0A6e2190e16c8E815Fe456f81d55097DDB7FAB0"
+export const contract = "0xEaA60bFB931dD2cF913322185384F257c9a21Ed9"
 
 export const ABI = [
 	{
@@ -10,6 +10,162 @@ export const ABI = [
 			}
 		],
 		"name": "AcceptRide",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_ride_id",
+				"type": "uint256"
+			}
+		],
+		"name": "approveRide",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_ride_id",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelRide",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claim",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "gender",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "phone",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "role",
+				"type": "uint256"
+			}
+		],
+		"name": "createUser",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "deleteUser",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "distance",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "from",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "to",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "chargePerKM",
+				"type": "uint256"
+			}
+		],
+		"name": "requestRide",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "name",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "age",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "gender",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "phone",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "email",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "role",
+				"type": "uint256"
+			}
+		],
+		"name": "updateUser",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -76,19 +232,6 @@ export const ABI = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_ride_id",
-				"type": "uint256"
-			}
-		],
-		"name": "approveRide",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
@@ -103,96 +246,6 @@ export const ABI = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_ride_id",
-				"type": "uint256"
-			}
-		],
-		"name": "cancelRide",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_ride_id",
-				"type": "uint256"
-			}
-		],
-		"name": "cancelRideByDriver",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "claim",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "age",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "gender",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "phone",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "email",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "role",
-				"type": "uint256"
-			}
-		],
-		"name": "createUser",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "deleteUser",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -329,7 +382,7 @@ export const ABI = [
 				"type": "address"
 			}
 		],
-		"name": "isActiveRide",
+		"name": "is_user",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -348,7 +401,7 @@ export const ABI = [
 				"type": "address"
 			}
 		],
-		"name": "is_user",
+		"name": "isActiveRide",
 		"outputs": [
 			{
 				"internalType": "bool",
@@ -357,72 +410,6 @@ export const ABI = [
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "distance",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "from",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "to",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "chargePerKM",
-				"type": "uint256"
-			}
-		],
-		"name": "requestRide",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "age",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "gender",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "phone",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "email",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "role",
-				"type": "uint256"
-			}
-		],
-		"name": "updateUser",
-		"outputs": [],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{

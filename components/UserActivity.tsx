@@ -33,7 +33,7 @@ const ActivityItem: FC<{
 
   const activityData = [
     { name: 'Ride ID', value:(activity?.id).toNumber()},
-    { name: 'Event' , value:eventIn ==1?"Requested":eventIn ==2?"Cancelled":eventIn==3?"Accepted":eventIn==4?"Completed":eventIn==5?"X By Driver":''},
+    { name: 'Event' , value:eventIn ==1?"Requested":eventIn ==2?"Cancelled":eventIn==3?"Accepted":eventIn==4?"Completed":''},
     // { name: 'Distance', value: distance},
     { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
     // { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
