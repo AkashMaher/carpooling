@@ -97,7 +97,6 @@ const Home = () => {
         <li onClick={()=> handleClick("account")}>
           account
         </li>
-        <li onClick={()=> handleClick('rides/request')}> Request a Ride</li>
         </>
         }
       </ul>
