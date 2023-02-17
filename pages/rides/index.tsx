@@ -10,6 +10,7 @@ import { ActivityType, UserType } from '../../utils/interfaces'
 import { add } from 'date-fns'
 import { opacityAnimation } from '../../utils/animations'
 import AllRides from '../../components/AllRides'
+import Head from 'next/head';
 const DashboardPage: NextPage = () => {
   const { address, isConnected } = useAccount()
   const router = useRouter()
@@ -111,6 +112,12 @@ const DashboardPage: NextPage = () => {
     })
 
   return (
+    <div>
+      <Head>
+        <title id="title">Available Rides</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+    <>
     <main className="p-4 pt-6 lg:px-16 min-h-screen">
        {Loading && <p className='text-center'>Loading...</p>}
        {userInfo.name && !Loading && 
@@ -151,6 +158,8 @@ const DashboardPage: NextPage = () => {
        </>
        }
     </main>
+    </>
+    </div>
   )
 }
 

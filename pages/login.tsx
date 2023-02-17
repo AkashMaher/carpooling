@@ -229,7 +229,7 @@ const ConnectPage: NextPage = () => {
   }
 })
     useEffect(()=> {
-        if(isConnected && isUser) router.push('./account')
+        if(isConnected && isUser) router.back()
         checkUser()
     })
     // let checkIfNewUser = isConnected && !isUser

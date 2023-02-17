@@ -8,6 +8,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected'
 import { contract, ABI, RPC } from '../contracts'
 import { add } from 'date-fns'
 import { opacityAnimation } from '../utils/animations'
+import Head from 'next/head';
 
 const AccountPage: NextPage = () => {
   const { address, isConnected } = useAccount()
@@ -63,6 +64,12 @@ const AccountPage: NextPage = () => {
 
 
   return (
+    <div>
+      <Head>
+        <title id="title">My Account</title>
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+    <>
     <main className="p-4 pt-6 lg:px-16 min-h-screen">
       {Loading && <p className='text-center'>Loading...</p>}
        {userInfo.name && !Loading && 
@@ -102,6 +109,8 @@ const AccountPage: NextPage = () => {
        </>
        }
     </main>
+    </>
+    </div>
   )
 }
 
