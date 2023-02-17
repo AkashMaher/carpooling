@@ -31,12 +31,21 @@ const ActivityItem: FC<{
   const eventIn = (activity?.status).toNumber()
   const distance = (activity?.distance).toNumber()
 
-  const activityData = [
+  const activityData = activity?.traveller == connectedAddress?[
     { name: 'Ride ID', value:(activity?.id).toNumber()},
     { name: 'Event' , value:eventIn ==1?"Requested":eventIn ==2?"Cancelled":eventIn==3?"Accepted":eventIn==4?"Completed":''},
     // { name: 'Distance', value: distance},
     { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
     // { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
+    { name: 'Cost',value:CostPerKM*distance },
+    { name: 'From',value:activity?.from },
+    { name: 'To',value:activity?.to },
+  ]:[
+    { name: 'Ride ID', value:(activity?.id).toNumber()},
+    { name: 'Event' , value:eventIn ==1?"Requested":eventIn ==2?"Cancelled":eventIn==3?"Accepted":eventIn==4?"Completed":''},
+    // { name: 'Distance', value: distance},
+    // { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
+    { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
     { name: 'Cost',value:CostPerKM*distance },
     { name: 'From',value:activity?.from },
     { name: 'To',value:activity?.to },
@@ -102,18 +111,28 @@ const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) 
     const [{ activity, totalPages, currentPage }, setActivityState] = useState(
     INITIAL_ACTIVITY_STATE
   )
+  const { address: connectedAddress } = useAccount()
 
   const handlePaginate = (pageNumber: number) => {
     setActivityState((prev) => ({ ...prev, currentPage: pageNumber }))
   }
 
 
-  const tableHeadings = [
+  const tableHeadings = userActivities?.[0]?.traveller == connectedAddress?[
     { name: 'Ride ID'},
     { name: 'Event' },
     // { name: 'Distance' },
     { name: 'Driver' },
     // { name: 'Traveller' },
+    { name: 'Cost' },
+    { name: 'From' },
+    { name: 'To' },
+  ]:[
+    { name: 'Ride ID'},
+    { name: 'Event' },
+    // { name: 'Distance' },
+    // { name: 'Driver' },
+    { name: 'Traveller' },
     { name: 'Cost' },
     { name: 'From' },
     { name: 'To' },
