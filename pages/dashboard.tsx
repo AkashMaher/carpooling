@@ -155,7 +155,7 @@ const DashboardPage: NextPage = () => {
           !isActiveRide && userRole == 1 && <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./rides/request')}}>Request A Ride</button>
         }
         { 
-          !isActiveRide && userRole == 2 && <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./rides')}}>All Rides</button>
+          !isActiveRide && userRole == 2 && <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./rides')}}>Available Rides</button>
         }
         <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./setting')}}>Account Setting</button>
         <br></br>
