@@ -159,7 +159,7 @@ const AllRides: FC<{ userActivities:ActivityType[], handleRide:(ride:ActivityTyp
           ) : (
             ''
           )}
-          {!activity && (
+          {!userActivities?.length && (
             <p className="text-center b text-3xl p-12">- No Available Rides -</p>
           )}
         </div>

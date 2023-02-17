@@ -176,7 +176,7 @@ const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) 
           ) : (
             ''
           )}
-          {!activity && (
+          {!userActivities?.length && (
             <p className="text-center b text-3xl p-12">- No Activities yet -</p>
           )}
         </div>
