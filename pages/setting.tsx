@@ -309,7 +309,7 @@ const SettingPage: NextPage = () => {
     <>
     
     <main className="p-4 pt-6 lg:px-16 min-h-screen">
-        {Loading && <p>Loading...</p>}
+        {Loading && <p className='text-center'>Loading...</p>}
         {!Loading && 
         <div>
             {/* <div>

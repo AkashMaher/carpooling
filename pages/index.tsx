@@ -81,7 +81,7 @@ const Home = () => {
       </Head>
     <></>
     <div className="container mx-auto text-center">
-      {Loading && <p>Loading...</p>}
+      {Loading && <p className='text-center'>Loading...</p>}
       {!Loading && 
       <>
       <h1 className="text-2xl font-bold ">Home Page</h1>
