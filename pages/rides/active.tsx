@@ -33,7 +33,7 @@ const AccountPage: NextPage = () => {
     // console.log(isUser)
     let getRide = await carContract.activeRide(address)
     let isActiveRide = getRide?.traveller !== '0x0000000000000000000000000000000000000000';
-    if(!isActiveRide) return router.push('../rides/request')
+    if(!isActiveRide) return router.push('../dashboard')
     let time= ''
     if ((getRide?.time).toNumber()) {
         let d = new Date((getRide?.time).toNumber()*1000)
