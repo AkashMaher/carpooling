@@ -38,7 +38,7 @@ const DashboardPage: NextPage = () => {
     let getUser = await carContract.userInfo(address)
     let isActiveRide = await carContract.isActiveRide(address)
     if((getUser?.role).toNumber() !== 2) return router.push(`../dashboard`)
-    if(isActiveRide) return router.push('..rides/active')
+    if(isActiveRide) return router.push('../rides/active')
     let activeRides = await carContract.getActiveRides();
     setActiveRides(activeRides)
     setUserInfo(getUser)
