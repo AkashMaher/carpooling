@@ -82,28 +82,28 @@ const ConnectButton: FC = () => {
           
           <p
             onClick={()=>handleBtn('account')}
-            className="flex items-center gap-3 text-white -bottom-[2rem] cursor-pointer hover:scale-105 transition-transform hover:text-green-500"
+            className="flex items-center gap-3  -bottom-[2rem] cursor-pointer hover:scale-105 transition-transform hover:text-green-500"
           >
             <CgProfile fontSize={20} />
             <span>Account</span>
           </p>
           <p
             onClick={()=> handleBtn('dashboard')}
-            className="flex items-center gap-3 text-white -bottom-[2rem] cursor-pointer hover:scale-105 transition-transform hover:text-blue-500"
+            className="flex items-center gap-3  -bottom-[2rem] cursor-pointer hover:scale-105 transition-transform hover:text-blue-500"
           >
             <RxDashboard fontSize={20} />
             <span>Dashboard</span>
           </p>
           <p
             onClick={()=> handleBtn('setting')}
-            className="flex items-center gap-3 text-white -bottom-[2rem] cursor-pointer hover:scale-105 transition-transform hover:text-yellow-500"
+            className="flex items-center gap-3  -bottom-[2rem] cursor-pointer hover:scale-105 transition-transform hover:text-yellow-500"
           >
             <AiOutlineSetting fontSize={20} />
             <span>Setting</span>
           </p>
           <p
             onClick={()=> handleBtn('disconnect')}
-            className="flex items-center gap-3 text-white cursor-pointer hover:scale-105 transition-transform hover:text-red-500"
+            className="flex items-center gap-3  cursor-pointer hover:scale-105 transition-transform hover:text-red-500"
           >
             <AiOutlineDisconnect fontSize={20} />
             <span>Disconnect</span>

@@ -36,7 +36,7 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
      <p>Wallet Address : {address}</p>
      <br></br>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="distance" className="text-white">
+            <label htmlFor="distance" >
                 Distance
             </label>
         </div>
@@ -50,7 +50,7 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
             />
         </div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="phone" className="text-white">
+            <label htmlFor="phone" >
                 From 
             </label>
         </div>
@@ -63,7 +63,7 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
             />
         </div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="to" className="text-white">
+            <label htmlFor="to" >
                 To
             </label>
         </div>
@@ -76,7 +76,7 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
             />
         </div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="costPerKM" className="text-white">
+            <label htmlFor="costPerKM" >
                 Cost Per KM
             </label>
         </div>

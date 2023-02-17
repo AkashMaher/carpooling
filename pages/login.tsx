@@ -35,7 +35,7 @@ const CreateAccount: FC<{ handleUserInput: (_name:any, _value: any) => void, cre
             >
      <div><p>New User : Create Account</p></div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="name" className="text-white">
+            <label htmlFor="name"  >
                 Name
             </label>
         </div>
@@ -48,7 +48,7 @@ const CreateAccount: FC<{ handleUserInput: (_name:any, _value: any) => void, cre
             />
         </div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="phone" className="text-white">
+            <label htmlFor="phone"  >
                 Mobile Number 
             </label>
         </div>
@@ -61,7 +61,7 @@ const CreateAccount: FC<{ handleUserInput: (_name:any, _value: any) => void, cre
             />
         </div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="email" className="text-white">
+            <label htmlFor="email"  >
                 Email Id
             </label>
         </div>
@@ -74,7 +74,7 @@ const CreateAccount: FC<{ handleUserInput: (_name:any, _value: any) => void, cre
             />
         </div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="age" className="text-white">
+            <label htmlFor="age"  >
                 Age
             </label>
         </div>
@@ -87,7 +87,7 @@ const CreateAccount: FC<{ handleUserInput: (_name:any, _value: any) => void, cre
             />
         </div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="gender" className="text-white">
+            <label htmlFor="gender"  >
                 Gender
             </label>
         </div>
@@ -99,7 +99,7 @@ const CreateAccount: FC<{ handleUserInput: (_name:any, _value: any) => void, cre
         </select>
         </div>
         <div className="font-poppins lg:text-[20px] flex justify-between mb-2 mt-3">
-            <label htmlFor="role" className="text-white">
+            <label htmlFor="role"  >
                 Role
             </label>
         </div>
