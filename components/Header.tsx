@@ -76,8 +76,8 @@ const ConnectButton: FC = () => {
       </motion.button>
       {isOpen && (
         <div
-          className="absolute z-50 right-0 left-0 -bottom-[5.5rem] bg-gradient-to-b from-custom-yellow to-custom-orange
-         font-nunito pl-5 pt-2 rounded"
+          className="absolute z-50 right-0 left-0 -bottom-[6.3rem] bg-gradient-to-b from-custom-yellow to-custom-orange
+         font-nunito pl-1 pt-2 rounded"
         >
           
           <p
