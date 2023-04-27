@@ -10,10 +10,10 @@ import { mapStyle } from "./mapStyle";
 
 const center = { lat: 18.5204, lng: 73.8567 };
 const LIBRARIES = ["places"];
-
+const googleMapApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || ''
 function Map() {
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "",
+    googleMapsApiKey: googleMapApiKey,
     libraries: LIBRARIES
   });
 
