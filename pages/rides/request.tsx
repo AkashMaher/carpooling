@@ -193,7 +193,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
               }}
             >
      <h1 className='text-lg font-bold'>Request a Ride</h1>
-     <p>Wallet Address : <span className='text-[0.6rem]'>{address}</span></p>
+     <p>Wallet Address : <span className='text-[0.6rem] lg:text-lg'>{address}</span></p>
      <br></br>
         
         {/* <div className="h-[35px] relative rounded-lg">
@@ -266,7 +266,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
         {<button className="outline-none mr-4 mt-4 w-30 h-full bg-[#a90909] py-[1%] px-[7.4%] text-white rounded-lg" onClick={()=> clearRoute()}>clear</button>}
         </div>
     </motion.div>
-    <div className='pt-20'>
+    <div className='pt-20 lg:pl-20'>
       {/* <Map /> */}
       <>
       <div className='relative flex flex-col align-middle h-[100vh] w-[100vw]'
