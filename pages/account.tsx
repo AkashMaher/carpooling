@@ -97,7 +97,7 @@ const AccountPage: NextPage = () => {
             <li>Mobile Number: {userInfo?.phone}</li>
             <li>Email Id: {userInfo?.email}</li>
             <li>Age: {(userInfo?.age)?.toNumber()}</li>
-            <li>Role: {(userInfo?.role)?.toNumber()==2?"Driver":(userInfo.role)?.toNumber()==1?"Traveller":''}</li>
+            <li>Role: {(userInfo?.role)?.toNumber()==2?"Driver":(userInfo.role)?.toNumber()==1?"Passenger":''}</li>
             <li>Account Created At : {time}</li>
         </ul>
         </div>
