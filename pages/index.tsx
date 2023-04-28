@@ -26,6 +26,9 @@ const Home = () => {
     const [Loading,setLoading] = useState(true)
     const [formData, setFormData] = useState(initialFormState)
     const [checkIfNewUser,setIfNewUser] = useState(false)
+    const [userInfo,setUserInfo] = useState<any>([])
+    const [isActiveRide,setIsActiveRide] = useState(false)
+    const [userRole,setUserRole] = useState(0)
     const { connect } = useConnect({
     connector: new InjectedConnector(),
     })
@@ -47,9 +50,14 @@ const Home = () => {
         const carContract = new ethers.Contract(contract, ABI, signer)
 
         const isUser = await carContract.is_user(address)
+        let getUser = await carContract.userInfo(address)
+        let isActiveRide = await carContract.isActiveRide(address)
         if(!isUser || isConnected) {
             setIfNewUser(true)
         }
+        setUserRole((getUser?.role).toNumber())
+        setIsActiveRide(isActiveRide)
+        setUserInfo(getUser)
         setUser(isUser)
         setLoading(false)
         // console.log(isUser)
@@ -58,6 +66,8 @@ const Home = () => {
         if (window.ethereum) {
               (window as any).ethereum.on('accountsChanged', function (accounts:any) {
         // Time to reload your interface with accounts[0]!
+              setUserInfo([]);
+              setLoading(true)
               checkUser()
               return
               })
@@ -70,36 +80,41 @@ const Home = () => {
     // let checkIfNewUser = isConnected && !isUser
 
   const handleClick = (_value:any)=> {
+    console.log(_value)
     if(!_value) return;
     router.push(`./${_value}`)
   }
   return (
       <div>
       <Head>
-        <title id="title">HomePage</title>
+        <title id="title">Web3 Carpooling</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
     <></>
-    <div className="container mx-auto text-center">
+    <div className="container mx-auto text-center pt-16">
       {Loading && <p className='text-center'>Loading...</p>}
       {!Loading && 
       <>
-      <h1 className="text-2xl font-bold ">Home Page</h1>
-      <ul className='cursor-pointer'>
-        {!isUser && <li onClick={()=> handleClick("login")}>
-          Login
-        </li>}
-        {isUser &&
+      <h1 className="text-3xl xl:text-6xl font-bold ">WEB3 CARPOOLING</h1>
+      <div className='cursor-pointer'>
+        {!isUser && 
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg" onClick={()=> handleClick("login")}>Login</button>}
+        {isUser && !isUser &&
         <>
-        <li onClick={()=> handleClick("dashboard")}>
-          dashboard
-        </li>
-        <li onClick={()=> handleClick("account")}>
-          account
-        </li>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg" onClick={()=> handleClick("dashboard")}>Dashboard</button>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg" onClick={()=> handleClick("account")}>Account</button>
         </>
         }
-      </ul>
+      </div>
+      <div className='pt-20'>
+        {isUser &&
+        <>
+        <button className="text-2xl sm:text-5xl outline-none mr-4 mt-4 w-50 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-[4rem]" onClick={()=> {isActiveRide?handleClick("rides/active"):!isActiveRide && userRole == 1?handleClick("rides/request"):!isActiveRide && userRole == 2?handleClick("rides"):''}}>
+          {isActiveRide?"Active Ride":!isActiveRide && userRole == 1?"Book A Ride":!isActiveRide && userRole == 2?"Check Available Rides":''}
+          </button>
+        </>
+        }
+      </div>
       </>
     }
       {/* Your home page content here */}

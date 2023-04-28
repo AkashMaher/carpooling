@@ -179,7 +179,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
   
   return (
     <>
-    <div className='flex flex-col sm:flex-row justify-between gap-6 mt-8'>
+    <div className='flex flex-col lg:flex-row justify-between gap-6 mt-8'>
     <motion.div
               className="mt-8"
               variants={opacityAnimation}
@@ -193,7 +193,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
               }}
             >
      <h1 className='text-lg font-bold'>Request a Ride</h1>
-     <p>Wallet Address : {address}</p>
+     <p>Wallet Address : <span className='text-[0.6rem]'>{address}</span></p>
      <br></br>
         
         {/* <div className="h-[35px] relative rounded-lg">
@@ -266,7 +266,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
         {<button className="outline-none mr-4 mt-4 w-30 h-full bg-[#a90909] py-[1%] px-[7.4%] text-white rounded-lg" onClick={()=> clearRoute()}>clear</button>}
         </div>
     </motion.div>
-    <div className='p-20'>
+    <div className='pt-20'>
       {/* <Map /> */}
       <>
       <div className='relative flex flex-col align-middle h-[100vh] w-[100vw]'
@@ -304,7 +304,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
               }}
             />
             <Marker
-              clickable={false}
+              clickable={false} draggable={true}
               position={directionsResponse.routes[0].legs[0].end_location}
               options={{
                 icon: {
