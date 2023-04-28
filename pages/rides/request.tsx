@@ -29,8 +29,8 @@ import { getAddress } from 'ethers/lib/utils'
 const LIBRARIES:any = ["places"];
 const googleMapApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || ''
 
-const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, requestRide:(distance:any, from:any, to:any)=> void, costPerKM:number , setFormData:(_value:any)=> void
-}> = ({ handleUserInput, requestRide, costPerKM, setFormData }) => {
+const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, costPerKM:number , setFormData:(_value:any)=> void
+}> = ({ requestRide, costPerKM, setFormData }) => {
   const { address } = useAccount()
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: googleMapApiKey,
@@ -49,7 +49,7 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
   const [userLong,setUserLong] = useState<any>() 
   const [cost,setCost] = useState<any>('')
   const [isMyLocation, setMyLocation] = useState(false)
-
+  const [center, setCenter] = useState<any>({ lat: 18.5204, lng: 73.8567 })
 
   const { chain } = useNetwork()
   const { switchNetwork } = useSwitchNetwork()
@@ -73,8 +73,6 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
   const originRef:any = useRef();
   const destinationRef:any = useRef();
 
-  const center = { lat: userLat, lng: userLong };
-
   useEffect(() => {
     if(width<640) {
       setStyle({ width: "90%", height: "40%" })
@@ -93,6 +91,7 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
     navigator.geolocation.getCurrentPosition(position =>{            
         setUserLat(position.coords.latitude);
         setUserLong(position.coords.longitude)
+        setCenter({lat:position.coords.latitude, lng:position.coords.longitude})
       })
   },[userLat, userLong])
 
@@ -127,13 +126,13 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
 
 
   const getAddress = (lat:any,long:any) => {
-  return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=${googleMapApiKey}`)
+  return axios.get(`https://carpool.ak1223.repl.co/get-address/${lat}/${long}`)
     .then(res => res.data)
     .then(json => {
-      if (json.results.length === 0) {
+      if (!json?.address) {
         return null
       }
-      let address = json.results['0'].formatted_address
+      let address = json?.address
       return {address}
     })
 
@@ -215,7 +214,6 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
         <div className="h-[35px] relative rounded-lg">
           <Autocomplete className="h-[35px] relative rounded-lg">
             <input
-                onChange={(e) => handleUserInput("from", originRef.current.value)}
                 type="text"
                 id="from"
                 placeholder='Enter Origin'
@@ -233,7 +231,6 @@ const RequestRide: FC<{ handleUserInput: (_name:any, _value: any) => void, reque
         <div className="h-[35px] relative rounded-lg">
           <Autocomplete className="h-[35px] relative rounded-lg">
             <input
-                onChange={(e) => handleUserInput("to", destinationRef.current.value)}
                 type="any"
                 id="to"
                 placeholder='Enter Destination'
@@ -442,14 +439,14 @@ const SettingPage: NextPage = () => {
     })
 
     // console.log(formData)
-    const handleUserInput = (_name:any,_value:any) => {
-        if(!_name || !_value) return;
-        console.log(_value)
-        // setFormData((prevData) => ({
-        // ...prevData,
-        // [_name]: _name=="age"?parseInt(_value):_value,
-        // }))
-    }
+    // const handleUserInput = (_name:any,_value:any) => {
+    //     if(!_name || !_value) return;
+    //     console.log(_value)
+    //     // setFormData((prevData) => ({
+    //     // ...prevData,
+    //     // [_name]: _name=="age"?parseInt(_value):_value,
+    //     // }))
+    // }
 
     const onSwitchNetwork = async () => {
     await switchNetwork?.(chainId.polygonMumbai)
@@ -538,7 +535,7 @@ const SettingPage: NextPage = () => {
         
             {checkIfNewUser && 
                 <>
-                <RequestRide handleUserInput={handleUserInput} requestRide={requestRide} costPerKM={costPerKM} setFormData={setFormData}/>
+                <RequestRide requestRide={requestRide} costPerKM={costPerKM} setFormData={setFormData}/>
                 </>
             }
         </div>}

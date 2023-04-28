@@ -78,16 +78,11 @@ const AccountPage: NextPage = () => {
       })
   },[userLat, userLong])
 
-  const originRef:any = useRef();
-  const destinationRef:any = useRef();
 
     async function calculateRoute(origin:any, destination:any) {
     if (origin === "" || destination === "") {
       return false;
     }
-
-    // await handleUserInput("from",from)
-    // await handleUserInput("to",to)
 
     const directionsService = new google.maps.DirectionsService();
     const results:any = await directionsService.route({
@@ -217,7 +212,8 @@ const AccountPage: NextPage = () => {
         .then((tx: any) => {
           console.log('processing')
           provider.waitForTransaction(tx.hash).then(()=> {
-            console.log("Ride Cancelled By Driver")
+            console.log("Ride Cancelled")
+            router.push('../dashboard')
             // router.push('../')
           })
         })

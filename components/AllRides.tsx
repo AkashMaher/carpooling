@@ -8,6 +8,15 @@ import { ActivityType, UserType } from '../utils/interfaces'
 import { shortenString } from '../utils'
 import { opacityAnimation } from '../utils/animations'
 import Pagination from './Pagination'
+
+import {
+  useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer
+} from "@react-google-maps/api";
+
+const LIBRARIES:any = ["places"];
+const googleMapApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || ''
+const Maxdistance = 5
+
 const ActivityItem: FC<{
   activity: ActivityType
   index: number
@@ -17,12 +26,42 @@ const ActivityItem: FC<{
   const { address: connectedAddress } = useAccount()
 
 
+  const [distanceFrom,setDistanceFrom] = useState<any>()
 
-//   let timePlaced = ''
-//   if (activity?.createdAt) {
-//     let d = new Date(activity.createdAt)
-//     timePlaced = d.toLocaleString()
-//   }
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: googleMapApiKey,
+    libraries: LIBRARIES
+  });
+  
+  const [userLat,setUserLat] = useState<any>() 
+  const [userLong,setUserLong] = useState<any>() 
+
+  useEffect(() => {
+  navigator.geolocation.getCurrentPosition(position =>{            
+        setUserLat(position.coords.latitude);
+        setUserLong(position.coords.longitude)
+        // getAddress(position.coords.latitude, position.coords.longitude)
+        
+      })
+  },[userLat, userLong])
+
+  async function calculateRoute(destination:any) {
+    if (destination === "" || !userLat || !userLong) {
+      return;
+    }
+
+    const directionsService = new google.maps.DirectionsService();
+    const results:any = await directionsService.route({
+      origin: new google.maps.LatLng(userLat, userLong), destination: destination, // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING
+    });
+    let distance = results.routes[0].legs[0].distance.text
+    setDistanceFrom(Math.round(distance.split(' ')[0]))
+    return distance;
+  }
+
+  calculateRoute(activity?.from)
+
 
   const isTo = activity?.driver !== '0x0000000000000000000000000000000000000000'
   // const isTx = activity?.transaction_hash
@@ -65,6 +104,7 @@ const ActivityItem: FC<{
         delay: index < 6 ? 0.1 * index : 0,
       }}
     >
+      
       {activityData?.map((activityData, index) => (
         <td
           key={index}
@@ -80,7 +120,10 @@ const ActivityItem: FC<{
               : activityData?.name === 'Accept'?handleRide(activity):''
           }
         >
+          { distanceFrom<=Maxdistance &&
+          <>
           {activityData?.value}
+          </>}
         </td>
       ))}
     </motion.tr>
