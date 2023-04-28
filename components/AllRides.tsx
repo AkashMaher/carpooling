@@ -36,7 +36,7 @@ const ActivityItem: FC<{
     { name: 'Distance', value: distance},
     { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
     { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
-    { name: 'CostPerKM',value:CostPerKM },
+    { name: 'Cost',value:CostPerKM*distance },
     { name: 'From',value:activity?.from },
     { name: 'To',value:activity?.to },
     {name: 'Accept',value:'Accept'}
@@ -115,7 +115,7 @@ const AllRides: FC<{ userActivities:ActivityType[], handleRide:(ride:ActivityTyp
     { name: 'Distance' },
     { name: 'Driver' },
     { name: 'Traveller' },
-    { name: 'CostPerKM' },
+    { name: 'Cost' },
     { name: 'From' },
     { name: 'To' },
     { name: 'Accept'}

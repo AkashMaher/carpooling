@@ -150,8 +150,8 @@ const DashboardPage: NextPage = () => {
         </div>
         <br></br>
         {/* <p>Account setting</p> */}
-        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./account')}}>My Account</button>
-        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./dashboard')}}>Dashboard</button>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('../account')}}>My Account</button>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('../dashboard')}}>Dashboard</button>
        </motion.div>
        <br></br>
        <AllRides userActivities={allActiveRides} handleRide={handleRide}/>
