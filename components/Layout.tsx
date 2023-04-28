@@ -29,6 +29,26 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   return (
     <div className="flex justify-center bg-gradient-to-r from-dark_mild to-dark_heavy">
       <div className=" w-full max-w-[1920px] bg-fixed bg-cover bg-market">
+        <video
+        // poster="/images/hero/poster.png"
+        preload="none"
+        autoPlay
+        muted
+        loop
+        className="w-full hidden lg:block opacity-20 absolute bg-fixed bg-no-repeat bg-cover z-[-10]"
+      >
+        <source src="/car_driving.mp4" type="video/mp4" />
+      </video>
+      <video
+        // poster="/images/hero/poster.png"
+        preload="none"
+        autoPlay
+        muted
+        loop
+        className="w-full block lg:hidden opacity-20 absolute bg-fixed bg-no-repeat bg-cover z-[-10]"
+      >
+        <source src="/car_driving2.mp4" type="video/mp4" />
+      </video>
         {/* <Detector /> */}
         <Header />
         <Buffer />

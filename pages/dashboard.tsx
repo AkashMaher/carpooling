@@ -133,7 +133,7 @@ const DashboardPage: NextPage = () => {
        <div>
         <h1 className="text-2xl font-bold ">User Dashboard</h1>
         <br></br>
-        <p>Available Balance: {userBalance}</p>
+        <p>Available Balance: {userBalance} INR</p>
         <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> handleClaim()}>claim</button>
         {/* <ul>
             <li>User Id: {`${(userInfo?.user_id)?.toNumber()}`}</li>

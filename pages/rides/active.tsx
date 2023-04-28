@@ -246,7 +246,7 @@ const AccountPage: NextPage = () => {
         </>}
        {isActiveRide && !Loading && 
        <>
-       <div className='flex flex-col sm:flex-row justify-between gap-6 mt-8'>
+       <div className='flex flex-col lg:flex-row justify-between gap-6 mt-8'>
        <div >
        <motion.div
               className="mt-8"
@@ -282,7 +282,7 @@ const AccountPage: NextPage = () => {
         }
        </motion.div>
        </div>
-       <div className='p-20'>
+       <div className='pt-20'>
       <>
       <div className='relative flex flex-col align-middle h-[100vh] w-[100vw]'
       // position="relative"
