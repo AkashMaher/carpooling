@@ -11,6 +11,14 @@ import { add } from 'date-fns'
 import { opacityAnimation } from '../../utils/animations'
 import AllRides from '../../components/AllRides'
 import Head from 'next/head';
+import axios from 'axios'
+import {
+  useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer
+} from "@react-google-maps/api";
+
+const LIBRARIES:any = ["places"];
+const googleMapApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || ''
+
 const DashboardPage: NextPage = () => {
   const { address, isConnected } = useAccount()
   const router = useRouter()
@@ -18,8 +26,40 @@ const DashboardPage: NextPage = () => {
   const [Loading,setLoading] = useState(true)
   const { chain } = useNetwork()
   const { switchNetwork } = useSwitchNetwork()
+  const [userLocation, setUserLocation] = useState<any>('')
   const [allActiveRides,setActiveRides] = useState<ActivityType[]>([])
 
+    const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: googleMapApiKey,
+    libraries: LIBRARIES
+  });
+  
+  const [userLat,setUserLat] = useState<any>() 
+  const [userLong,setUserLong] = useState<any>() 
+
+  useEffect(() => {
+  navigator.geolocation.getCurrentPosition(position =>{            
+        setUserLat(position.coords.latitude);
+        setUserLong(position.coords.longitude)
+        // getAddress(position.coords.latitude, position.coords.longitude)
+        
+      })
+  },[userLat, userLong])
+
+  async function calculateRoute(destination:any) {
+    if (destination === "") {
+      return false;
+    }
+
+    const directionsService = new google.maps.DirectionsService();
+    const results:any = await directionsService.route({
+      origin: new google.maps.LatLng(userLat, userLong), destination: destination, // eslint-disable-next-line no-undef
+      travelMode: google.maps.TravelMode.DRIVING
+    });
+    let distance = results.routes[0].legs[0].distance.text
+    console.log(distance)
+    return distance;
+  }
   const checkUser = async ()=> {
     if(!isConnected) return router.push('./login');
     if(userInfo?.name) return;
@@ -43,7 +83,25 @@ const DashboardPage: NextPage = () => {
     setActiveRides(activeRides)
     setUserInfo(getUser)
     setLoading(false)
+    // let userLocation:any = await getAddress(userLat, userLong)
+    // setUserLocation(userLocation)
     }
+
+    // const filterRides = () => {
+    //   const filtered = allActiveRides?.filter( async(a) => {
+    //     let distanceFromUser = await calculateRoute(a?.from)
+    //     console.log(distanceFromUser)
+    //     let distance = Math.round(distanceFromUser.split(' ')[0])
+    //     if(distance<=3) {
+    //       return a
+    //     }
+    //     setActiveRides(filtered)
+    //   })
+    // }
+
+    // useEffect(()=> {
+    //   filterRides()
+    // })
 
     
     // console.log(FilteredActivities)
@@ -150,8 +208,8 @@ const DashboardPage: NextPage = () => {
         </div>
         <br></br>
         {/* <p>Account setting</p> */}
-        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./account')}}>My Account</button>
-        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('./dashboard')}}>Dashboard</button>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('../account')}}>My Account</button>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg" onClick={()=> {router.push('../dashboard')}}>Dashboard</button>
        </motion.div>
        <br></br>
        <AllRides userActivities={allActiveRides} handleRide={handleRide}/>
