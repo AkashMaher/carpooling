@@ -50,7 +50,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
   const [cost,setCost] = useState<any>('')
   const [isMyLocation, setMyLocation] = useState(false)
   const [center, setCenter] = useState<any>({ lat: 18.5204, lng: 73.8567 })
-
+  const [Fetched, setFetched] = useState(false)
   const { chain } = useNetwork()
   const { switchNetwork } = useSwitchNetwork()
   const [isChainCorrect, setIsChainCorrect] = useState(true)
@@ -119,9 +119,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
     let distance = (results.routes[0].legs[0].distance.text).split(' ')[0]
     let from =originRef?.current?.value
     let to =destinationRef?.current?.value
-
-    
-    return await checkAndRequest(distance);
+    setFetched(true)
   }
 
 
@@ -164,11 +162,13 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
   }
 
 
-  const checkAndRequest = async (distance:any) => {
+  const checkAndRequest = async () => {
+    let Distance = distance.split(' ')[0]
     let from =originRef?.current?.value
     let to =destinationRef?.current?.value
+    await requestRide(Distance, from, to)
     // console.log(distance, from, to)
-    await requestRide(distance, from, to)
+    
     // let check = await calculateRoute()
     // setTimeout(async ()=> {
     //   //
@@ -262,7 +262,7 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
         </div> */}
         <div>
         {/* <p>Request Ride</p> */}
-        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg" onClick={()=> {isChainCorrect?calculateRoute():onSwitchNetwork()}}>{isChainCorrect?'Request a Ride':'Switch Network'}</button>
+        <button className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg" onClick={()=> {isChainCorrect?(!Fetched?calculateRoute():checkAndRequest()):onSwitchNetwork()}}>{isChainCorrect?(!Fetched?'Request a Ride':'Confirm Request'):'Switch Network'}</button>
         {<button className="outline-none mr-4 mt-4 w-30 h-full bg-[#a90909] py-[1%] px-[7.4%] text-white rounded-lg" onClick={()=> clearRoute()}>clear</button>}
         </div>
     </motion.div>
