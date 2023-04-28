@@ -266,7 +266,7 @@ const AccountPage: NextPage = () => {
         <ul>
             <li><span className='text-blue-500'>Ride Id:</span> {`${ride?.id}`}</li>
             <li><span className='text-blue-500'>Driver Address:</span> {ride?.driver}</li>
-            <li><span className='text-blue-500'>Traveller Address:</span> {ride?.traveller}</li>
+            <li><span className='text-blue-500'>Passenger Address:</span> {ride?.traveller}</li>
             <li><span className='text-blue-500'>From :</span> {ride?.from}</li>
             <li><span className='text-blue-500'>To :</span> {ride?.to}</li>
             <li><span className='text-blue-500'>Distance:</span> {ride?.distance} <span>KM</span></li>

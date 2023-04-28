@@ -74,7 +74,7 @@ const ActivityItem: FC<{
     { name: 'Ride ID', value:(activity?.id).toNumber()},
     { name: 'Distance', value: distance},
     { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
-    { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
+    { name: 'Passenger',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
     { name: 'Cost',value:CostPerKM*distance },
     { name: 'From',value:activity?.from },
     { name: 'To',value:activity?.to },
@@ -108,12 +108,12 @@ const ActivityItem: FC<{
       {activityData?.map((activityData, index) => (
         <td
           key={index}
-          className={activityData?.name === 'Traveller' ||
+          className={activityData?.name === 'Passenger' ||
             (isTo && activityData?.name === 'Driver')
               ? 'cursor-pointer underline hover:text-sky-500'
               : activityData?.name === 'Accept'?'cursor-pointer underline hover:text-green-500':'h-16'}
           onClick={() =>
-            activityData?.name === 'Traveller'
+            activityData?.name === 'Passenger'
               ? onClickAddress(activity?.traveller)
               : isTo && activityData?.name === 'Driver'
               ? onClickAddress(activity?.driver)
@@ -157,7 +157,7 @@ const AllRides: FC<{ userActivities:ActivityType[], handleRide:(ride:ActivityTyp
     { name: 'Ride ID'},
     { name: 'Distance' },
     { name: 'Driver' },
-    { name: 'Traveller' },
+    { name: 'Passenger' },
     { name: 'Cost' },
     { name: 'From' },
     { name: 'To' },
