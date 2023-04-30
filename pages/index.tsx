@@ -40,6 +40,7 @@ const Home = () => {
             setUser(false)
             return;
         }
+        if(userInfo?.name || checkIfNewUser) return;
         // let provider = new ethers.providers.Web3Provider(ethereum)
         const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai)
         
