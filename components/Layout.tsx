@@ -27,9 +27,9 @@ const CurrentFooter = () => {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex justify-center bg-gradient-to-r from-dark_mild to-dark_heavy">
+    <div className="flex from-dark_mild to-dark_heavy bg-backgroundImg bg-fixed bg-no-repeat justify-center">
       <div className=" w-full max-w-[1920px] bg-fixed bg-no-repeat bg-cover">
-        <video
+        {/* <video
         // poster="/images/hero/poster.png"
         preload="none"
         autoPlay
@@ -48,7 +48,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         className="w-full block lg:hidden opacity-20 absolute bg-fixed bg-no-repeat bg-cover z-[-10]"
       >
         <source src="/car_driving2.mp4" type="video/mp4" />
-      </video>
+      </video> */}
         {/* <Detector /> */}
         <Header />
         <Buffer />

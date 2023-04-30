@@ -7,7 +7,7 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage:{
-        mainHomePage: 'url(/images/background/bg-main.jpg)',
+        backgroundImg:'url(/images/background/car-driving.jpg)'
       },
       backgroundSize: {
       'auto': 'auto',
