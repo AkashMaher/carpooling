@@ -82,7 +82,8 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
   }, [width])
 
   useEffect(()=> {
-    let cost = Math.round((distance).split(' ')[0])*costPerKM
+    let prefix = (distance).split(' ')[1]
+    let cost = prefix=='km'?Math.round((distance).split(' ')[0])*costPerKM:prefix=='m'?10:0
     setCost(parseFloat(distance)<1?"10 INR":!isNaN(cost)?`${cost} INR`:'')
   }, [distance, costPerKM])
 
@@ -163,7 +164,8 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
 
 
   const checkAndRequest = async () => {
-    let Distance = distance.split(' ')[0]
+    let prefix = distance.split(' ')[1]
+    let Distance = prefix=='km'?distance.split(' ')[0]:prefix=='m'?1:0
     let from =originRef?.current?.value
     let to =destinationRef?.current?.value
     await requestRide(Distance, from, to)

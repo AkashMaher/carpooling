@@ -112,7 +112,7 @@ const UpdateAccount: FC<{ handleUserInput: (_name:any, _value: any) => void, upd
         <div className="h-[35px] relative rounded-lg">
 
             <select className="outline-none w-30 h-full bg-[#585858] px-[8.6%] text-white rounded-lg" id="role" name="role" onChange={(e) => handleUserInput("role",e.target.value)} defaultValue={userInfo?.role}>
-            <option value="1">Traveller</option>
+            <option value="1">Passenger</option>
             <option value="2">Driver</option>
         </select>
         </div>
