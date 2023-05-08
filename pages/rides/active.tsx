@@ -42,7 +42,7 @@ const AccountPage: NextPage = () => {
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [curr, setCurr] = useState<any>('');
-
+  const [userContactNumber, setUserContactNumber] = useState("")
   const { chain } = useNetwork()
   const { switchNetwork } = useSwitchNetwork()
   const [isChainCorrect, setIsChainCorrect] = useState(true)
@@ -129,6 +129,8 @@ const AccountPage: NextPage = () => {
     Ride['to'] = getRide?.to
     setRide(Ride)
     setLoading(false)
+    let userAddress = address == getRide?.traveller?getRide?.driver:address == getRide?.driver?getRide?.traveller:''
+    await getUserInfo(userAddress)
     await calculateRoute(getRide?.from, getRide?.to)
     }
 // console.log(ride)
@@ -148,6 +150,32 @@ const AccountPage: NextPage = () => {
         checkUser()
         return;
     })
+
+
+  const getUserInfo = async (userAddress:any) => {
+    if(!userAddress) return
+    const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai)
+
+    const walletAddress = address // first account in MetaMask
+    const signer = provider.getSigner(walletAddress)
+
+    // console.log(signer)
+    const carContract = new ethers.Contract(contract, ABI, signer)
+
+    console.log(userAddress)
+    const isUser = await carContract.is_user(userAddress)
+
+    if(!isUser) return ''
+
+    let userInfo = await carContract.userInfo(userAddress);
+    setUserContactNumber(userInfo?.phone)
+    }
+
+    // useEffect(()=> {
+    //   getUserInfo()
+    // })
+
+
 
   //   const onSwitchNetwork = async () => {
   //   await switchNetwork?.(chainId.polygonMumbai)
@@ -280,6 +308,13 @@ const AccountPage: NextPage = () => {
         {user==1 &&
             <button className={`outline-none mr-4 mt-4 w-30 h-full ${user==1 && ride?.status ==3?"bg-[#48bc12]": (ride?.status ==1 && user==1)?"bg-[#c91e1e]":''} py-[1%] px-[9.5%] text-white rounded-lg`} onClick={()=> {isChainCorrect?handleRide():onSwitchNetwork()}}>{isChainCorrect?(user==1 && ride?.status ==3?'Approve Ride':(ride?.status ==1 && user==1)?'Cancel Ride':''):'Switch Network'}</button>
         }
+        {userContactNumber && <div className='pt-5'>
+          <ul>
+            <li>{user==1?"Driver Contact Info":"Passenger Contact Info"}</li>
+            <li>Mobile Number: <span>{userContactNumber}</span></li>
+          </ul>
+          
+        </div>}
        </motion.div>
        </div>
        <div className='pt-20'>
