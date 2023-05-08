@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { useEffect,FC, useState, useRef } from 'react'
 import { useAccount, useConnect, useDisconnect,useSwitchNetwork,useNetwork, chainId } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
-import { contract, ABI, RPC } from '../../contracts'
+import { contract, ABI, RPC, ERC20ABI, ERC20Contract } from '../../contracts'
 import Head from 'next/head';
 import { opacityAnimation } from '../../utils/animations'
 import { mapStyle } from '../../components/mapStyle'
@@ -15,7 +15,7 @@ import {
 import {
   useJsApiLoader, GoogleMap, Marker, Autocomplete, DirectionsRenderer
 } from "@react-google-maps/api";
-import axios from 'axios'
+import axios, { all } from 'axios'
 import useWindowDimensions from '../../utils/hooks/useWindowDimensions'
 import { getAddress } from 'ethers/lib/utils'
 // const chainId = '80001'
@@ -475,6 +475,9 @@ const SettingPage: NextPage = () => {
 
         // console.log(signer)
         const carContract = new ethers.Contract(contract, ABI, signer)
+        const vINRContract = new ethers.Contract(ERC20Contract, ERC20ABI, signer)
+        
+        const allowanceAmt = await vINRContract.allowance(address, contract)
 
         const isUser = await carContract.is_user(address)
         if(!isUser) return console.log("user account not exist")
@@ -482,8 +485,13 @@ const SettingPage: NextPage = () => {
         let _value:any = Math.round(distance)*costPerKM
         console.log(_value)
         _value = _value<10?10:_value
-
-        const RequestRide = await carContract.requestRide(Math.round(distance)<1?1:Math.round(distance), from, to, {from:address,value:_value})
+        _value = ethers.utils.parseUnits(`${_value}`,"ether")
+        console.log(_value)
+        console.log(allowanceAmt)
+        if(allowanceAmt<_value) return await vINRContract.approve(contract, _value)
+        .then(async (tx:any) => {
+          console.log('approved')
+        const RequestRide = await carContract.requestRide(Math.round(distance)<1?1:Math.round(distance), from, to, {from:address})
         .then((tx: any) => {
           console.log('processing')
           provider.waitForTransaction(tx.hash).then(()=> {
@@ -491,6 +499,17 @@ const SettingPage: NextPage = () => {
             router.push('../rides/active')
           })
         })
+        })
+        
+        const RequestRide = await carContract.requestRide(Math.round(distance)<1?1:Math.round(distance), from, to, {from:address})
+        .then((tx: any) => {
+          console.log('processing')
+          provider.waitForTransaction(tx.hash).then(()=> {
+            console.log("New Ride Requested")
+            router.push('../rides/active')
+          })
+        })
+        
         .catch((e: { message: any }) => {
         console.log(e.message)
         return

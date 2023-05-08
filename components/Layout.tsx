@@ -17,18 +17,12 @@ const Buffer = () => {
   return <div className="bg-transparent w-full h-[100px]"></div>
 }
 
-const CurrentFooter = () => {
-  const router = useRouter()
-  if (router.asPath === '/') {
-    return null
-  }
-  // return <Footer />
-}
-
 const Layout: FC<LayoutProps> = ({ children }) => {
+  const router = useRouter()
   return (
-    <div className="flex from-dark_mild to-dark_heavy bg-backgroundImg bg-fixed bg-no-repeat justify-center">
-      <div className=" w-full max-w-[1920px] bg-fixed bg-no-repeat bg-cover">
+    // ${router.asPath === '/'?"bg-backgroundImg":"bg-gradient-to-r"}
+    <div className={`flex from-dark_mild to-dark_heavy bg-gradient-to-r bg-fixed bg-no-repeat justify-center`}> 
+      <div className=" w-full max-w-[1920px] bg-fixed bg-no-repeat bg-cover opacity-100">
         {/* <video
         // poster="/images/hero/poster.png"
         preload="none"
