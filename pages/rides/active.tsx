@@ -289,7 +289,7 @@ const AccountPage: NextPage = () => {
               }}
             >
        <div>
-        <h1 className="text-2xl font-bold ">Account Info</h1>
+        <h1 className="text-2xl font-bold ">Your Active Ride</h1>
         <br></br>
         <ul>
             <li><span className='text-blue-500'>Ride Id:</span> {`${ride?.id}`}</li>
