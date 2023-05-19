@@ -1,73 +1,113 @@
-import { motion } from 'framer-motion'
-import { useRouter } from 'next/router'
-import { FC, useEffect, useState } from 'react'
-import { useQuery } from 'react-query'
-import { useAccount } from 'wagmi'
-import { ActivityType, UserType } from '../utils/interfaces'
+import { motion } from "framer-motion";
+import { useRouter } from "next/router";
+import { FC, useEffect, useState } from "react";
+import { useQuery } from "react-query";
+import { useAccount } from "wagmi";
+import { ActivityType, UserType } from "../utils/interfaces";
 // import { QUERIES } from '../react-query/constants'
 // import { getUser, getUserActivity } from '../react-query/queries'
-import { shortenString } from '../utils'
-import { opacityAnimation } from '../utils/animations'
-import Pagination from './Pagination'
+import { shortenString } from "../utils";
+import { opacityAnimation } from "../utils/animations";
+import Pagination from "./Pagination";
 const ActivityItem: FC<{
-  activity: ActivityType
-  index: number
+  activity: ActivityType;
+  index: number;
 }> = ({ activity, index }) => {
-  const router = useRouter()
-  const { address: connectedAddress } = useAccount()
+  const router = useRouter();
+  const { address: connectedAddress } = useAccount();
 
+  //   let timePlaced = ''
+  //   if (activity?.createdAt) {
+  //     let d = new Date(activity.createdAt)
+  //     timePlaced = d.toLocaleString()
+  //   }
 
-
-//   let timePlaced = ''
-//   if (activity?.createdAt) {
-//     let d = new Date(activity.createdAt)
-//     timePlaced = d.toLocaleString()
-//   }
-
-  const isTo = activity?.driver !== '0x0000000000000000000000000000000000000000'
+  const isTo =
+    activity?.driver !== "0x0000000000000000000000000000000000000000";
   // const isTx = activity?.transaction_hash
-  const isTx = undefined
-  const CostPerKM = (activity?.costPerKM).toNumber()
-  const eventIn = (activity?.status).toNumber()
-  const distance = (activity?.distance).toNumber()
+  const isTx = undefined;
+  const CostPerKM = (activity?.costPerKM).toNumber();
+  const eventIn = (activity?.status).toNumber();
+  const distance = (activity?.distance).toNumber();
 
-  const activityData = activity?.traveller == connectedAddress?[
-    { name: 'Ride ID', value:(activity?.id).toNumber()},
-    { name: 'Event' , value:eventIn ==1?"Requested":eventIn ==2?"Cancelled":eventIn==3?"Accepted":eventIn==4?"Completed":''},
-    // { name: 'Distance', value: distance},
-    { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
-    // { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
-    { name: 'Cost',value:CostPerKM*distance },
-    { name: 'From',value:activity?.from },
-    { name: 'To',value:activity?.to },
-  ]:[
-    { name: 'Ride ID', value:(activity?.id).toNumber()},
-    { name: 'Event' , value:eventIn ==1?"Requested":eventIn ==2?"Cancelled":eventIn==3?"Accepted":eventIn==4?"Completed":''},
-    // { name: 'Distance', value: distance},
-    // { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
-    { name: 'Passenger',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
-    { name: 'Cost',value:CostPerKM*distance },
-    { name: 'From',value:activity?.from },
-    { name: 'To',value:activity?.to },
-  ]
+  const activityData =
+    activity?.traveller == connectedAddress
+      ? [
+          { name: "Ride ID", value: (activity?.id).toNumber() },
+          {
+            name: "Event",
+            value:
+              eventIn == 1
+                ? "Requested"
+                : eventIn == 2
+                ? "Cancelled"
+                : eventIn == 3
+                ? "Accepted"
+                : eventIn == 4
+                ? "Completed"
+                : "",
+          },
+          // { name: 'Distance', value: distance},
+          {
+            name: "Driver",
+            value:
+              activity?.driver == connectedAddress
+                ? "You"
+                : !isTo
+                ? "-"
+                : shortenString(activity?.driver, 3, 3),
+          },
+          // { name: 'Traveller',value:activity?.traveller == connectedAddress?"You":shortenString(activity?.traveller,3,3) },
+          { name: "Cost", value: CostPerKM * distance },
+          { name: "From", value: activity?.from },
+          { name: "To", value: activity?.to },
+        ]
+      : [
+          { name: "Ride ID", value: (activity?.id).toNumber() },
+          {
+            name: "Event",
+            value:
+              eventIn == 1
+                ? "Requested"
+                : eventIn == 2
+                ? "Cancelled"
+                : eventIn == 3
+                ? "Accepted"
+                : eventIn == 4
+                ? "Completed"
+                : "",
+          },
+          // { name: 'Distance', value: distance},
+          // { name: 'Driver',value:activity?.driver == connectedAddress?"You":!isTo?"-":shortenString(activity?.driver,3,3) },
+          {
+            name: "Passenger",
+            value:
+              activity?.traveller == connectedAddress
+                ? "You"
+                : shortenString(activity?.traveller, 3, 3),
+          },
+          { name: "Cost", value: CostPerKM * distance },
+          { name: "From", value: activity?.from },
+          { name: "To", value: activity?.to },
+        ];
 
   const onClickAddress = (address: string) => {
-    let explorer = 'mumbai.polygonscan.com'
-      let url = `https://${explorer}/address/${address}`
-      window.open(url, '_blank')
-  }
+    let explorer = "mumbai.polygonscan.com";
+    let url = `https://${explorer}/address/${address}`;
+    window.open(url, "_blank");
+  };
 
   return (
     <motion.tr
       className={`${
-        index % 2 === 0 ? 'bg-[#070707]' : 'bg-transparent'
+        index % 2 === 0 ? "bg-[#070707]" : "bg-transparent"
       } font-poppins text-[#D7D7D7] lg:text-lg py-2 h-16`}
       variants={opacityAnimation}
       initial="initial"
       whileInView="final"
       viewport={{ once: true }}
       transition={{
-        ease: 'easeInOut',
+        ease: "easeInOut",
         duration: 0.4,
         delay: index < 6 ? 0.1 * index : 0,
       }}
@@ -75,68 +115,73 @@ const ActivityItem: FC<{
       {activityData?.map((activityData, index) => (
         <td
           key={index}
-          className={activityData?.name === 'Passenger' ||
-            (isTo && activityData?.name === 'Driver')
-              ? 'cursor-pointer underline hover:text-sky-500'
-              : 'h-16'}
+          className={
+            activityData?.name === "Passenger" ||
+            (isTo && activityData?.name === "Driver")
+              ? "cursor-pointer underline hover:text-sky-500"
+              : "h-16"
+          }
           onClick={() =>
-            activityData?.name === 'Passenger'
+            activityData?.name === "Passenger"
               ? onClickAddress(activity?.traveller)
-              : isTo && activityData?.name === 'Driver'
+              : isTo && activityData?.name === "Driver"
               ? onClickAddress(activity?.driver)
-              : ''
+              : ""
           }
         >
           {activityData?.value}
         </td>
       ))}
     </motion.tr>
-  )
-}
+  );
+};
 
 type InitialActivityStateType = {
-  activity: ActivityType[] | undefined
-  totalPages: number
-  currentPage: number
-}
+  activity: ActivityType[] | undefined;
+  totalPages: number;
+  currentPage: number;
+};
 
 const INITIAL_ACTIVITY_STATE: InitialActivityStateType = {
   activity: undefined,
   totalPages: 1,
   currentPage: 1,
-}
+};
 
-const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) => {
-
-    const [{ activity, totalPages, currentPage }, setActivityState] = useState(
+const UserActivity: FC<{ userActivities: ActivityType[] }> = ({
+  userActivities,
+}) => {
+  const [{ activity, totalPages, currentPage }, setActivityState] = useState(
     INITIAL_ACTIVITY_STATE
-  )
-  const { address: connectedAddress } = useAccount()
+  );
+  const { address: connectedAddress } = useAccount();
 
   const handlePaginate = (pageNumber: number) => {
-    setActivityState((prev) => ({ ...prev, currentPage: pageNumber }))
-  }
+    setActivityState((prev) => ({ ...prev, currentPage: pageNumber }));
+  };
 
-
-  const tableHeadings = userActivities?.[0]?.traveller == connectedAddress?[
-    { name: 'Ride ID'},
-    { name: 'Event' },
-    // { name: 'Distance' },
-    { name: 'Driver' },
-    // { name: 'Traveller' },
-    { name: 'Cost' },
-    { name: 'From' },
-    { name: 'To' },
-  ]:[
-    { name: 'Ride ID'},
-    { name: 'Event' },
-    // { name: 'Distance' },
-    // { name: 'Driver' },
-    { name: 'Passenger' },
-    { name: 'Cost' },
-    { name: 'From' },
-    { name: 'To' },
-  ]
+  const tableHeadings =
+    userActivities?.[0]?.traveller == connectedAddress
+      ? [
+          { name: "Ride ID" },
+          { name: "Event" },
+          // { name: 'Distance' },
+          { name: "Driver" },
+          // { name: 'Traveller' },
+          { name: "Cost" },
+          { name: "From" },
+          { name: "To" },
+        ]
+      : [
+          { name: "Ride ID" },
+          { name: "Event" },
+          // { name: 'Distance' },
+          // { name: 'Driver' },
+          { name: "Passenger" },
+          { name: "Cost" },
+          { name: "From" },
+          { name: "To" },
+        ];
 
   return (
     <>
@@ -168,13 +213,13 @@ const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) 
                         activity={activity}
                         index={index}
                       />
-                    )
+                    );
                   })}
                 {/* {activity?.length === 0 && <td>Activites</td>} */}
               </tbody>
             </table>
           ) : (
-            ''
+            ""
           )}
           {!userActivities?.length && (
             <p className="text-center b text-3xl p-12">- No Activities yet -</p>
@@ -189,7 +234,7 @@ const UserActivity: FC<{ userActivities:ActivityType[]}> = ({ userActivities }) 
         />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default UserActivity
+export default UserActivity;
