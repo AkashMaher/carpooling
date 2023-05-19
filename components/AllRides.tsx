@@ -125,10 +125,6 @@ console.log(distanceFrom<=Maxdistance?true:false)
           <>
           {activityData?.value}
           </>}
-         { distanceFrom>Maxdistance &&
-          <>
-          {distanceFrom}
-          </>}
         </td>
       ))}
     </motion.tr>
