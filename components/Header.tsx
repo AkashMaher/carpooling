@@ -123,8 +123,6 @@ const Location: FC = () => {
 
   const userLocationAddress = useContext(userShortLocation)
 
-  console.log(userLocationAddress)
-
   useEffect(() => {
     setClientWidth(width)
   }, [width])

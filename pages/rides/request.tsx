@@ -46,8 +46,8 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
   const [screenWidth, setScreenWidth] = useState<any>()
   const [style, setStyle] = useState({ width: "100%", height: "100%" })
   const { width } = useWindowDimensions()
-  // const [userLat,setUserLat] = useState<any>() 
-  // const [userLong,setUserLong] = useState<any>() 
+  const [userLat,setUserLat] = useState<any>() 
+  const [userLong,setUserLong] = useState<any>() 
   const [cost,setCost] = useState<any>('')
   const [isMyLocation, setMyLocation] = useState(false)
   const [center, setCenter] = useState<any>({ lat: 18.5204, lng: 73.8567 })
@@ -91,13 +91,13 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
   }, [distance, costPerKM])
 
 
-  // useEffect(() => {
-  //   navigator.geolocation.getCurrentPosition(position =>{            
-  //       setUserLat(position.coords.latitude);
-  //       setUserLong(position.coords.longitude)
-  //       setCenter({lat:position.coords.latitude, lng:position.coords.longitude})
-  //     })
-  // },[userLat, userLong])
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(position =>{            
+        setUserLat(position.coords.latitude);
+        setUserLong(position.coords.longitude)
+        setCenter({lat:position.coords.latitude, lng:position.coords.longitude})
+      })
+  },[userLat, userLong])
 
 
   if (!isLoaded) {
@@ -142,10 +142,28 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
 
   async function selectMyLocation() {
     // setMyLocation(true)
-    // let locationAddress:any = await getAddress(userLat, userLong)
-    originRef.current.value = userLocationAddress
+    let locationAddress:any = await reverseGeocode(userLat, userLong)
+    originRef.current.value = locationAddress
   }
 
+
+  async function reverseGeocode(lat:any, lng:any) {
+  const geocoder = new google.maps.Geocoder();
+  try {
+    const result = await geocoder.geocode(
+      {
+        location: {
+          lat: lat,
+          lng: lng
+        }
+      });
+    const { results } = result;
+    let x = result.results[0].formatted_address;
+    return x;
+  } catch (e) {
+    console.log("Geocode was not successful for the following reason: " + e);
+  }
+}
   
     
 
