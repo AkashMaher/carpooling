@@ -46,6 +46,7 @@ const ActivityItem: FC<{
   },[userLat, userLong])
 
   async function calculateRoute(destination:any) {
+    console.log(userLat && userLong?'checking rides':'check')
     if (destination === "" || !userLat || !userLong) {
       return;
     }
@@ -62,7 +63,7 @@ const ActivityItem: FC<{
 
   calculateRoute(activity?.from)
 
-
+console.log(distanceFrom<=Maxdistance?true:false)
   const isTo = activity?.driver !== '0x0000000000000000000000000000000000000000'
   // const isTx = activity?.transaction_hash
   const isTx = undefined
