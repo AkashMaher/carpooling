@@ -1,16 +1,17 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useContext } from 'react'
 import { AiOutlineDisconnect, AiOutlineSetting } from 'react-icons/ai'
 import { CgProfile } from 'react-icons/cg'
 import { RxDashboard } from 'react-icons/rx'
-import {IoWalletOutline} from 'react-icons/io5'
+import {IoWalletOutline, IoLocationOutline} from 'react-icons/io5'
 import { useAccount, useDisconnect } from 'wagmi'
 import { fromLeftAnimation, fromRightAnimation } from '../utils/animations'
 import { CONTAINER_PADDING } from '../utils/constants'
 import useIsMounted from '../utils/hooks/useIsMounted'
 import useWindowDimensions from '../utils/hooks/useWindowDimensions'
+import { userShortLocation } from './context'
 
 const ConnectButton: FC = () => {
   const router = useRouter()
@@ -114,6 +115,51 @@ const ConnectButton: FC = () => {
   )
 }
 
+const Location: FC = () => {
+  const router = useRouter()
+  const { width } = useWindowDimensions()
+  const [clientWidth, setClientWidth] = useState(0)
+  const isMounted = useIsMounted()
+
+  const userLocationAddress = useContext(userShortLocation)
+
+  useEffect(() => {
+    setClientWidth(width)
+  }, [width])
+
+  return (
+    <motion.div
+    className='btn-primary flex cut-corners  h-[29px] md:h-[33px] lg:h-[39px] 
+      text-xs md:text-sm lg:text-base disabled:bg-gray-500 gap-1'
+      variants={fromLeftAnimation}
+      initial="initial"
+      animate="final"
+      transition={{
+        ease: 'easeInOut',
+        duration: 0.6,
+        delay: 0.4,
+      }}
+    >
+      <div>
+        {!isMounted
+          ? null
+          : <IoLocationOutline fontSize={25} />}
+        </div>
+      {/* <Image
+        src="/images/default_logo.png"
+        alt="car_logo"
+        width={clientWidth > 768 ? '100px' : '45px'}
+        height={clientWidth > 768 ? '64px' : '46px'}
+        className="cursor-pointer"
+        onClick={() => router.push('/')}
+      /> */}
+      <p>
+        {userLocationAddress}
+      </p>
+    </motion.div>
+  )
+}
+
 const Logo: FC = () => {
   const router = useRouter()
   const { width } = useWindowDimensions()
@@ -157,6 +203,7 @@ const Header: FC = () => {
             <Logo />
           </div>
           <div className="col-span-9 md:col-span-6 flex justify-end items-center gap-2 md:gap-3 lg:gap-4">
+            <Location />
             <ConnectButton />
           </div>
         </div>

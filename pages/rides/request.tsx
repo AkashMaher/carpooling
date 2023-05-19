@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { ethers } from 'ethers'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect,FC, useState, useRef } from 'react'
+import { useEffect,FC, useState, useRef, useContext } from 'react'
 import { useAccount, useConnect, useDisconnect,useSwitchNetwork,useNetwork, chainId } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { contract, ABI, RPC, ERC20ABI, ERC20Contract } from '../../contracts'
@@ -18,6 +18,7 @@ import {
 import axios, { all } from 'axios'
 import useWindowDimensions from '../../utils/hooks/useWindowDimensions'
 import { getAddress } from 'ethers/lib/utils'
+import { userLocation } from '../../components/context'
 // const chainId = '80001'
  type selectDataType = {
   name: string
@@ -73,6 +74,8 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
   const originRef:any = useRef();
   const destinationRef:any = useRef();
 
+
+  const userLocationAddress = useContext(userLocation)
   useEffect(() => {
     if(width<640) {
       setStyle({ width: "90%", height: "40%" })
@@ -124,25 +127,43 @@ const RequestRide: FC<{  requestRide:(distance:any, from:any, to:any)=> void, co
   }
 
 
-  const getAddress = (lat:any,long:any) => {
-  return axios.get(`https://carpool.ak1223.repl.co/get-address/${lat}/${long}`)
-    .then(res => res.data)
-    .then(json => {
-      if (!json?.address) {
-        return null
-      }
-      let address = json?.address
-      return {address}
-    })
+  // const getAddress = (lat:any,long:any) => {
+  // return axios.get(`https://carpool.ak1223.repl.co/get-address/${lat}/${long}`)
+  //   .then(res => res.data)
+  //   .then(json => {
+  //     if (!json?.address) {
+  //       return null
+  //     }
+  //     let address = json?.address
+  //     return {address}
+  //   })
 
-  }
+  // }
 
   async function selectMyLocation() {
     // setMyLocation(true)
-    let locationAddress:any = await getAddress(userLat, userLong)
-    originRef.current.value = locationAddress?.address
+    let locationAddress:any = await reverseGeocode(userLat, userLong)
+    originRef.current.value = locationAddress
   }
 
+
+  async function reverseGeocode(lat:any, lng:any) {
+  const geocoder = new google.maps.Geocoder();
+  try {
+    const result = await geocoder.geocode(
+      {
+        location: {
+          lat: lat,
+          lng: lng
+        }
+      });
+    const { results } = result;
+    let x = result.results[0].formatted_address;
+    return x;
+  } catch (e) {
+    console.log("Geocode was not successful for the following reason: " + e);
+  }
+}
   
     
 

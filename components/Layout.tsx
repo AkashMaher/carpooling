@@ -1,8 +1,11 @@
 import { useRouter } from 'next/router'
-import { FC, ReactNode } from 'react'
+import { FC, ReactNode, useEffect } from 'react'
+import { useState, createContext, useContext } from "react";
+import { userLocation, userShortLocation } from './context';
 // import Footer from './Footer'
 
 import Header from './Header'
+import axios from 'axios';
 // import Detector from './NetworkDetector'
 
 interface LayoutProps {
@@ -19,8 +22,42 @@ const Buffer = () => {
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   const router = useRouter()
+
+    const [userLat,setUserLat] = useState<any>() 
+  const [userLong,setUserLong] = useState<any>()
+  const [userLocationAddress,setUserLocationAddress] = useState<any>()
+  const [userLocationShortName,setShortName] = useState<any>()
+
+    useEffect(() => {
+    navigator.geolocation.getCurrentPosition(position =>{            
+        setUserLat(position.coords.latitude);
+        setUserLong(position.coords.longitude)
+      })
+  },[userLat, userLong])
+
+  const getAddress = (lat:any,long:any) => {
+    if(!lat && !long) return
+  return axios.get(`https://carpool.ak1223.repl.co/get-address/${lat}/${long}`)
+    .then(res => res.data)
+    .then(json => {
+      if (!json?.address) {
+        return null
+      }
+      let address = json?.address
+      let shortName = json?.shortName
+      setShortName(shortName)
+      return setUserLocationAddress(address)
+    })
+
+  }
+
+  getAddress(userLat, userLong)
+  
   return (
     // ${router.asPath === '/'?"bg-backgroundImg":"bg-gradient-to-r"}
+        <userLocation.Provider value={userLocationAddress} >
+          <userShortLocation.Provider value={userLocationShortName} >
+
     <div className={`flex from-dark_mild to-dark_heavy bg-gradient-to-r bg-fixed bg-no-repeat justify-center`}> 
       <div className=" w-full max-w-[1920px] bg-fixed bg-no-repeat bg-cover opacity-100">
         {/* <video
@@ -51,6 +88,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         {/* <CurrentFooter /> */}
       </div>
     </div>
+    </userShortLocation.Provider>
+    </userLocation.Provider>
   )
 }
 
