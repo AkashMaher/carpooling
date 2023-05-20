@@ -29,7 +29,6 @@ const UpdateAccount: FC<{
 }> = ({ handleUserInput, updateUser, userInfo, deleteUser }) => {
   const { address } = useAccount();
   const [currentTab, setCurrentTab] = useState<"assets" | "activity">("assets");
-
   return (
     <>
       <motion.div
@@ -245,8 +244,18 @@ const SettingPage: NextPage = () => {
       await onSwitchNetwork();
     }
     let provider = new ethers.providers.Web3Provider(ethereum);
-    const { name, age, gender, phone, email, role } = formData;
-    console.log(formData);
+
+      const data = {
+      name: (document.getElementById('name') as HTMLInputElement)?.value,
+      age : (document.getElementById('age') as HTMLInputElement)?.value,
+      gender: (document.getElementById('gender') as HTMLInputElement)?.value,
+      phone : (document.getElementById('phone') as HTMLInputElement)?.value,
+      email : (document.getElementById('email') as HTMLInputElement)?.value,
+      role: (document.getElementById('role') as HTMLInputElement)?.value,
+      };
+
+    const { name, age, gender, phone, email, role } = data;
+    // console.log(data);
     // const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai)
 
     const walletAddress = address; // first account in MetaMask

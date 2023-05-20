@@ -16,6 +16,7 @@ export interface IUserContextProps {
    isConnect:any;
    Loading:boolean;
    checkIfNewUser:boolean;
+   isUser:boolean;
 }
 
 
@@ -34,7 +35,8 @@ const defaultValue: IUserContextProps = {
     isConnect:false,
     setIsConnect:()=>{},
     Loading:true,
-    checkIfNewUser:false
+    checkIfNewUser:false,
+    isUser:false
 };
 
 

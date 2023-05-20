@@ -168,7 +168,7 @@ const ConnectPage: NextPage = () => {
     if (!address) {
       setLoading(false);
       setIfNewUser(false);
-      return;
+      return console.log('hell');
     }
     // let provider = new ethers.providers.Web3Provider(ethereum)
     const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
@@ -179,11 +179,12 @@ const ConnectPage: NextPage = () => {
     // console.log(signer)
     const carContract = new ethers.Contract(contract, ABI, signer);
 
-    const isUser = await carContract.is_user(address);
-    if (!isUser && isConnected) {
-      setIfNewUser(true);
+    const is_user = await carContract.is_user(address);
+    if (is_user) {
+      setIfNewUser(false);
     }
-    setUser(isUser);
+    if (isConnected && is_user) router.back();
+    setUser(is_user);
     setLoading(false);
     // console.log(isUser)
   };

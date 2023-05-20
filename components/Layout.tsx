@@ -45,6 +45,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   const [costPerKM, setCostPerKM] = useState(10);
   const [Loading, setLoading] = useState(true);
   const [checkIfNewUser, setIfNewUser] = useState(false);
+  const [isUser, setUser] = useState(false);
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       setUserLat(position.coords.latitude);
@@ -54,7 +55,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   }, [userLat, userLong]);
 
   const userContextValue: IUserContextProps = {
-    userInfo,userActivities, userBalance, userRole, isActiveRide, setUserBalance, ride,userContactNumber, allActiveRides, costPerKM, isConnect, setIsConnect, Loading, checkIfNewUser
+    userInfo,userActivities, userBalance, userRole, isActiveRide, setUserBalance, ride,userContactNumber, allActiveRides, costPerKM, isConnect, setIsConnect, Loading, checkIfNewUser, isUser
   }
 
   const { address, isConnected } = useAccount();
@@ -78,8 +79,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     // console.log(signer)
     const carContract = new ethers.Contract(contract, ABI, signer);
 
-    const isUser = await carContract.is_user(address);
-    if (isUser || isConnected) {
+    const is_user = await carContract.is_user(address);
+    if (is_user || isConnected) {
       setIfNewUser(true);
     }
     // if (!isUser) return router.push("./login");
@@ -115,6 +116,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     setUserInfo(getUser);
     setActiveRides(activeRides);
     setRide(Ride);
+    setUser(is_user)
     setCostPerKM(parseInt(getCost));
 
     let otherUserAddress =
