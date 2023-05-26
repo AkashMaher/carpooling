@@ -55,7 +55,7 @@ const AccountPage: NextPage = () => {
   const chainID = 80001;
 
   const {
-    userInfo,userActivities, userBalance, userRole, isActiveRide, setUserBalance, ride,userContactNumber, Loading
+    isActiveRide, ride,userContactNumber, Loading, setIsConnect, setLoading,setRide
   } = useContext(userContext)
   useEffect(() => {
     if (!chainID) return;
@@ -104,69 +104,69 @@ const AccountPage: NextPage = () => {
     setDuration(results.routes[0].legs[0].duration.text);
   }
 
-  // const checkUser = async () => {
-  //   if (!isConnected) return router.push("../login");
-  //   if (ride?.traveller == "0x0000000000000000000000000000000000000000")
-  //     return router.push("../rides/request");
-  //   // let provider = new ethers.providers.Web3Provider(ethereum)
-  //   const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
+  const checkUser = async () => {
+    if (!isConnected) return router.push("../login");
+    if (ride?.traveller == "0x0000000000000000000000000000000000000000")
+      return router.push("../rides/request");
+    // let provider = new ethers.providers.Web3Provider(ethereum)
+    const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
 
-  //   const walletAddress = address; // first account in MetaMask
-  //   const signer = provider.getSigner(walletAddress);
+    const walletAddress = address; // first account in MetaMask
+    const signer = provider.getSigner(walletAddress);
 
-  //   // console.log(signer)
-  //   const carContract = new ethers.Contract(contract, ABI, signer);
+    // console.log(signer)
+    const carContract = new ethers.Contract(contract, ABI, signer);
 
-  //   const isUser = await carContract.is_user(address);
-  //   if (!isUser) return router.push("../login");
-  //   // console.log(isUser)
-  //   let getRide = await carContract.activeRide(address);
-  //   let isActiveRide =
-  //     getRide?.traveller !== "0x0000000000000000000000000000000000000000";
-  //   if (!isActiveRide) return router.push("../dashboard");
-  //   let time = "";
-  //   if ((getRide?.time).toNumber()) {
-  //     let d = new Date((getRide?.time).toNumber() * 1000);
-  //     time = d.toLocaleString();
-  //   }
-  //   let Ride: any = {};
-  //   Ride["costPerKM"] = (getRide?.costPerKM).toNumber();
-  //   Ride["id"] = (getRide?.id).toNumber();
-  //   Ride["distance"] = (getRide?.distance).toNumber();
-  //   Ride["status"] = (getRide?.status).toNumber();
-  //   Ride["time"] = time;
-  //   Ride["traveller"] = getRide?.traveller;
-  //   Ride["driver"] = getRide?.driver;
-  //   Ride["from"] = getRide?.from;
-  //   Ride["to"] = getRide?.to;
-  //   setRide(Ride);
-  //   setLoading(false);
-  //   let userAddress =
-  //     address == getRide?.traveller
-  //       ? getRide?.driver
-  //       : address == getRide?.driver
-  //       ? getRide?.traveller
-  //       : "";
-  //   await getUserInfo(userAddress);
-  //   await calculateRoute(getRide?.from, getRide?.to);
-  // };
-  // // console.log(ride)
-  // useEffect(() => {
-  //   if (window.ethereum) {
-  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-  //       setRide([]);
-  //       setLoading(true);
-  //       checkUser();
-  //       return;
-  //     });
-  //   }
-  // });
+    const isUser = await carContract.is_user(address);
+    if (!isUser) return router.push("../login");
+    // console.log(isUser)
+    let getRide = await carContract.activeRide(address);
+    let isActiveRide =
+      getRide?.traveller !== "0x0000000000000000000000000000000000000000";
+    if (!isActiveRide) return router.push("../dashboard");
+    let time = "";
+    if ((getRide?.time).toNumber()) {
+      let d = new Date((getRide?.time).toNumber() * 1000);
+      time = d.toLocaleString();
+    }
+    let Ride: any = {};
+    Ride["costPerKM"] = (getRide?.costPerKM).toNumber();
+    Ride["id"] = (getRide?.id).toNumber();
+    Ride["distance"] = (getRide?.distance).toNumber();
+    Ride["status"] = (getRide?.status).toNumber();
+    Ride["time"] = time;
+    Ride["traveller"] = getRide?.traveller;
+    Ride["driver"] = getRide?.driver;
+    Ride["from"] = getRide?.from;
+    Ride["to"] = getRide?.to;
+    setRide(Ride);
+    setLoading(false);
+    let userAddress =
+      address == getRide?.traveller
+        ? getRide?.driver
+        : address == getRide?.driver
+        ? getRide?.traveller
+        : "";
+    // await getUserInfo(userAddress);
+    await calculateRoute(getRide?.from, getRide?.to);
+  };
+  // console.log(ride)
+  useEffect(() => {
+    if (window.ethereum) {
+      (window as any).ethereum.on("accountsChanged", function (accounts: any) {
+        setRide([]);
+        setLoading(true);
+        checkUser();
+        return;
+      });
+    }
+  });
 
-  // useEffect(() => {
-  //   if (user) return;
-  //   checkUser();
-  //   return;
-  // });
+  useEffect(() => {
+    if (user) return;
+    checkUser();
+    return;
+  });
 
   // const getUserInfo = async (userAddress: any) => {
   //   if (!userAddress) return;
@@ -229,6 +229,7 @@ const AccountPage: NextPage = () => {
           provider.waitForTransaction(tx.hash).then(() => {
             console.log("Ride Approved");
             router.push("../dashboard");
+            setIsConnect(false)
           });
         })
         .catch((e: { message: any }) => {
@@ -257,6 +258,7 @@ const AccountPage: NextPage = () => {
           provider.waitForTransaction(tx.hash).then(() => {
             console.log("Ride Cancelled");
             router.push("../dashboard");
+            setIsConnect(false)
             // router.push('../')
           });
         })

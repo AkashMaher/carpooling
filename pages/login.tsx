@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { ethers } from "ethers";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useEffect, FC, useState } from "react";
+import { useEffect, FC, useState, useContext } from "react";
 import {
   useAccount,
   useConnect,
@@ -16,6 +16,7 @@ import { contract, ABI, RPC } from "../contracts";
 import Head from "next/head";
 import { opacityAnimation } from "../utils/animations";
 import useIsMounted from "../utils/hooks/useIsMounted";
+import userContext from "../components/context/user";
 // const chainId = '80001'
 type selectDataType = {
   name: string;
@@ -147,7 +148,7 @@ const ConnectPage: NextPage = () => {
   const isMounted = useIsMounted();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
-  const [isUser, setUser] = useState();
+  // const [isUser, setUser] = useState();
   const { address, isConnected } = useAccount();
   const [Loading, setLoading] = useState(true);
   const [formData, setFormData] = useState(initialFormState);
@@ -156,13 +157,15 @@ const ConnectPage: NextPage = () => {
     connector: new InjectedConnector(),
   });
   const { disconnect } = useDisconnect();
-
+  const {setIsConnect, isUser, setUser} = useContext(userContext)
   const handleConnect = async () => {
     setLoading(true);
     await connect();
     await checkUser();
+    setIsConnect(false)
   };
 
+  
   // console.log(isConnected)
   const checkUser = async () => {
     if (!address) {
@@ -248,8 +251,10 @@ const ConnectPage: NextPage = () => {
     }
   });
   useEffect(() => {
-    if (isConnected && isUser) router.back();
+    if (isConnected ) {
+      if(isUser) router.back();
     checkUser();
+  }
   });
   // let checkIfNewUser = isConnected && !isUser
 
@@ -267,7 +272,7 @@ const ConnectPage: NextPage = () => {
               <h1 className="text-2xl font-bold ">
                 {!isConnected
                   ? "Login with metamask"
-                  : checkIfNewUser
+                  : !isUser 
                   ? "Sign Up"
                   : "Login"}
               </h1>
@@ -289,7 +294,7 @@ const ConnectPage: NextPage = () => {
                 )}
               </div>
 
-              {checkIfNewUser && (
+              {!isUser && (
                 <>
                   <CreateAccount
                     handleUserInput={handleUserInput}

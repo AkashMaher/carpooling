@@ -504,7 +504,7 @@ const SettingPage: NextPage = () => {
   // const [userInfo, setUserInfo] = useState<any>([]);
   // const [costPerKM, setCostPerKM] = useState(10);
 
-  const {userInfo, costPerKM, Loading, checkIfNewUser} = useContext(userContext)
+  const {userInfo, costPerKM, Loading, checkIfNewUser, setIsConnect} = useContext(userContext)
 
 
 
@@ -563,6 +563,7 @@ const SettingPage: NextPage = () => {
               provider.waitForTransaction(tx.hash).then(() => {
                 console.log("New Ride Requested");
                 router.push("../rides/active");
+                setIsConnect(false)
               });
             });
         });
@@ -579,6 +580,7 @@ const SettingPage: NextPage = () => {
         provider.waitForTransaction(tx.hash).then(() => {
           console.log("New Ride Requested");
           router.push("../rides/active");
+          setIsConnect(false)
         });
       })
 

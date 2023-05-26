@@ -50,18 +50,27 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     navigator.geolocation.getCurrentPosition((position) => {
       setUserLat(position.coords.latitude);
       setUserLong(position.coords.longitude);
-      console.log(position.coords);
     });
   }, [userLat, userLong]);
 
   const userContextValue: IUserContextProps = {
-    userInfo,userActivities, userBalance, userRole, isActiveRide, setUserBalance, ride,userContactNumber, allActiveRides, costPerKM, isConnect, setIsConnect, Loading, checkIfNewUser, isUser
+    userInfo,userActivities, userBalance, userRole, isActiveRide, setUserBalance, ride,userContactNumber, allActiveRides, costPerKM, isConnect, setIsConnect, Loading, checkIfNewUser, isUser,setUser, setRide, setIsActiveRide, setUserRole, setUserInfo, setLoading
   }
 
   const { address, isConnected } = useAccount();
 
   const checkUser = async () => {
-    if (!isConnected) return router.push("./login");
+    try {
+
+    
+
+    if (!isConnected) {
+      if(router.asPath == '/rides/request' || router.asPath == '/rides/active') return router.push("../login")
+      if(router.asPath !== '/') return router.push("./login")
+    };
+    // if(router.asPath !== '/login') {
+    //   return;
+    // };
     if (userInfo?.name && isConnect) return;
     if (!address) {
       setLoading(false);
@@ -83,6 +92,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     if (is_user || isConnected) {
       setIfNewUser(true);
     }
+    if(!is_user) return setUser(is_user);
     // if (!isUser) return router.push("./login");
     // console.log(isUser)
 
@@ -116,7 +126,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     setUserInfo(getUser);
     setActiveRides(activeRides);
     setRide(Ride);
-    setUser(is_user)
+    
     setCostPerKM(parseInt(getCost));
 
     let otherUserAddress =
@@ -135,11 +145,15 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     }
     }
     setLoading(false)
+    } catch(error) {
+      console.log(error)
+    }
   };
 
   useEffect(() => {
     if (window.ethereum) {
       (window as any).ethereum.on("accountsChanged", function (accounts: any) {
+        setIsConnect(false)
         setUserInfo([]);
         checkUser();
         return;
@@ -156,7 +170,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
 
 
   useEffect(() => {
+    
+    // if(isConnected && !userInfo){
     checkUser();
+    // }
   });
 
   const getAddress = async (lat: any, long: any) => {

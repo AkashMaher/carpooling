@@ -126,14 +126,14 @@ const UpdateAccount: FC<{
           </select>
         </div>
         <div>
-          <p>Update Your Account</p>
+          {/* <p>Update Your Account</p> */}
           <button
             className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg"
             onClick={() => updateUser()}
           >
             Update Account
           </button>
-          <p>Delete Your Account</p>
+          {/* <p>Delete Your Account</p> */}
           <button
             className="outline-none mr-4 mt-4 w-30 h-full bg-[#ff1212] py-[1%] px-[7.5%] text-white rounded-lg"
             onClick={() => deleteUser()}
@@ -337,7 +337,7 @@ const SettingPage: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <>
-        <main className="p-4 pt-6 lg:px-16 min-h-screen">
+        <main className="p-4 pt-6 lg:px-16 min-h-screen text-center">
           {Loading && <p className="text-center">Loading...</p>}
           {!Loading && (
             <div>

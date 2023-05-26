@@ -45,7 +45,7 @@ const DashboardPage: NextPage = () => {
     libraries: LIBRARIES,
   });
 
-  const {userInfo, allActiveRides, Loading} = useContext(userContext)
+  const {userInfo, allActiveRides, Loading, setIsConnect} = useContext(userContext)
   const [userLat, setUserLat] = useState<any>();
   const [userLong, setUserLong] = useState<any>();
 
@@ -57,65 +57,7 @@ const DashboardPage: NextPage = () => {
     });
   }, [userLat, userLong]);
 
-  // async function calculateRoute(destination: any) {
-  //   if (destination === "") {
-  //     return false;
-  //   }
 
-  //   const directionsService = new google.maps.DirectionsService();
-  //   const results: any = await directionsService.route({
-  //     origin: new google.maps.LatLng(userLat, userLong),
-  //     destination: destination, // eslint-disable-next-line no-undef
-  //     travelMode: google.maps.TravelMode.DRIVING,
-  //   });
-  //   let distance = results.routes[0].legs[0].distance.text;
-  //   console.log(distance);
-  //   return distance;
-  // }
-  // const checkUser = async () => {
-  //   if (!isConnected) return router.push("./login");
-  //   if (userInfo?.name) return;
-  //   // let provider = new ethers.providers.Web3Provider(ethereum)
-  //   const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
-
-  //   const walletAddress = address; // first account in MetaMask
-  //   const signer = provider.getSigner(walletAddress);
-
-  //   // console.log(signer)
-  //   const carContract = new ethers.Contract(contract, ABI, signer);
-
-  //   const isUser = await carContract.is_user(address);
-  //   if (!isUser) return router.push("./login");
-  //   // console.log(isUser)
-  //   let getUser = await carContract.userInfo(address);
-  //   let isActiveRide = await carContract.isActiveRide(address);
-  //   if ((getUser?.role).toNumber() !== 2) return router.push(`../dashboard`);
-  //   if (isActiveRide) return router.push("../rides/active");
-  //   let activeRides = await carContract.getActiveRides();
-  //   setActiveRides(activeRides);
-  //   setUserInfo(getUser);
-  //   setLoading(false);
-  //   // let userLocation:any = await getAddress(userLat, userLong)
-  //   // setUserLocation(userLocation)
-  // };
-
-  // const filterRides = () => {
-  //   const filtered = allActiveRides?.filter( async(a) => {
-  //     let distanceFromUser = await calculateRoute(a?.from)
-  //     console.log(distanceFromUser)
-  //     let distance = Math.round(distanceFromUser.split(' ')[0])
-  //     if(distance<=3) {
-  //       return a
-  //     }
-  //     setActiveRides(filtered)
-  //   })
-  // }
-
-  // useEffect(()=> {
-  //   filterRides()
-  // })
-
-  // console.log(FilteredActivities)
 
   const onSwitchNetwork = async () => {
     await switchNetwork?.(chainId.polygonMumbai);
@@ -152,6 +94,7 @@ const DashboardPage: NextPage = () => {
           console.log("processing");
           provider.waitForTransaction(tx.hash).then(() => {
             console.log("Ride Accepted");
+            setIsConnect(false)
             router.push("../rides/active");
           });
         })
@@ -162,21 +105,6 @@ const DashboardPage: NextPage = () => {
     }
   };
 
-  // console.log(allActiveRides)
-  // useEffect(() => {
-  //   if (window.ethereum) {
-  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-  //       setUserInfo([]);
-  //       setLoading(true);
-  //       checkUser();
-  //       return;
-  //     });
-  //   }
-  // });
-
-  // useEffect(() => {
-  //   checkUser();
-  // });
 
   return (
     <div>
@@ -204,15 +132,6 @@ const DashboardPage: NextPage = () => {
                 <div>
                   <h1 className="text-2xl font-bold ">All Available Rides</h1>
                   <br></br>
-                  {/* <ul>
-            <li>User Id: {`${(userInfo?.user_id)?.toNumber()}`}</li>
-            <li>Name: {userInfo?.name}</li>
-            <li>Wallet Address: {address?address:''}</li>
-            <li>Mobile Number: {userInfo?.phone}</li>
-            <li>Email Id: {userInfo?.email}</li>
-            <li>Age: {(userInfo?.age)?.toNumber()}</li>
-            <li>Role: {(userInfo?.role)?.toNumber()==2?"Driver":(userInfo.role)?.toNumber()==1?"Traveller":''}</li>
-        </ul> */}
                 </div>
                 <br></br>
                 {/* <p>Account setting</p> */}

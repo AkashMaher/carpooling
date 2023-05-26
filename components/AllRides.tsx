@@ -109,8 +109,8 @@ const ActivityItem: FC<{
   return (
     <motion.tr
       className={`${
-        index % 2 === 0 ? "bg-[#070707]" : "bg-transparent"
-      } font-poppins text-[#D7D7D7] lg:text-lg py-2 h-16`}
+        index % 2 === 0 ? "bg-[#f4efef]" : "bg-transparent"
+      } font-poppins text-[#0c0c0c] lg:text-lg py-2 h-16`}
       variants={opacityAnimation}
       initial="initial"
       whileInView="final"
@@ -186,11 +186,11 @@ const AllRides: FC<{
   return (
     <>
       <div
-        className="pb-20 md:px-4 bg-[#1F2021] rounded-lg
+        className="pb-20 md:px-4 bg-[#d4d9df] rounded-lg
   gap-20 w-full  max-w-full mx-auto px-2 lg:px-6 py-9 lg:h-[928px] scrollbar-thin scrollbar-thumb-[#5A5B61] scrollbar-thumb-rounded-lg scrollbar-track-[#1F2021] overflow-y-scroll"
       >
         <div
-          className="w-full font-poppins text-[#D7D7D7] lg:text-lg px-0 max-h-full 
+          className="w-full font-poppins text-[#070707] lg:text-lg px-0 max-h-full 
       overflow-y-scroll scrollbar-thin scrollbar-thumb-[#5A5B61] scrollbar-thumb-rounded-lg scrollbar-track-[#1F2021]"
         >
           {userActivities?.length ? (

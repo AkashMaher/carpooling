@@ -17,6 +17,12 @@ export interface IUserContextProps {
    Loading:boolean;
    checkIfNewUser:boolean;
    isUser:boolean;
+   setRide:(_value:any)=> void;
+  setIsActiveRide:(_value:boolean)=> void;
+  setUser:(_value:boolean)=> void;
+  setUserRole:(_value:any)=> void; 
+  setUserInfo:(_value:any)=> void; 
+  setLoading:(_value:boolean) => void
 }
 
 
@@ -36,7 +42,13 @@ const defaultValue: IUserContextProps = {
     setIsConnect:()=>{},
     Loading:true,
     checkIfNewUser:false,
-    isUser:false
+    isUser:false,
+    setRide:()=>{}, 
+    setIsActiveRide:()=>{}, 
+    setUser:()=> {},
+    setUserRole:()=> {}, 
+    setUserInfo:()=> {},
+    setLoading:()=> {},
 };
 
 
