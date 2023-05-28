@@ -2,7 +2,13 @@ import { motion } from "framer-motion";
 import { ethers } from "ethers";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import { useContext, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useContext,
+} from "react";
 import {
   useAccount,
   useConnect,
@@ -17,16 +23,26 @@ import { opacityAnimation } from "../../utils/animations";
 import Head from "next/head";
 import {
   Box,
+  Button,
+  ButtonGroup,
+  Flex,
+  HStack,
+  IconButton,
+  Input,
+  SkeletonText,
+  Text,
 } from "@chakra-ui/react";
 import {
   useJsApiLoader,
   GoogleMap,
   Marker,
+  Autocomplete,
   DirectionsRenderer,
 } from "@react-google-maps/api";
 import { mapStyle } from "../../components/mapStyle";
 import useWindowDimensions from "../../utils/hooks/useWindowDimensions";
 import userContext from "../../components/context/user";
+
 const LIBRARIES: any = ["places"];
 const googleMapApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
 const AccountPage: NextPage = () => {
@@ -37,8 +53,8 @@ const AccountPage: NextPage = () => {
 
   const { address, isConnected } = useAccount();
   const router = useRouter();
-  // const [ride, setRide] = useState<any>([]);
-  // const [Loading, setLoading] = useState(true);
+  const [ride, setRide] = useState<any>([]);
+  const [Loading, setLoading] = useState(true);
   const { width } = useWindowDimensions();
   const [style, setStyle] = useState({ width: "100%", height: "100%" });
   const [userLat, setUserLat] = useState<any>();
@@ -48,15 +64,13 @@ const AccountPage: NextPage = () => {
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [curr, setCurr] = useState<any>("");
-  // const [userContactNumber, setUserContactNumber] = useState("");
+  const [userContactNumber, setUserContactNumber] = useState("");
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const [isChainCorrect, setIsChainCorrect] = useState(true);
   const chainID = 80001;
 
-  const {
-    isActiveRide, ride,userContactNumber, Loading, setIsConnect, setLoading,setRide
-  } = useContext(userContext)
+  const { SetUserActivities, setIsActiveRide } = useContext(userContext);
   useEffect(() => {
     if (!chainID) return;
     if (chain?.id === chainID) {
@@ -147,7 +161,7 @@ const AccountPage: NextPage = () => {
         : address == getRide?.driver
         ? getRide?.traveller
         : "";
-    // await getUserInfo(userAddress);
+    await getUserInfo(userAddress);
     await calculateRoute(getRide?.from, getRide?.to);
   };
   // console.log(ride)
@@ -168,24 +182,24 @@ const AccountPage: NextPage = () => {
     return;
   });
 
-  // const getUserInfo = async (userAddress: any) => {
-  //   if (!userAddress) return;
-  //   const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
+  const getUserInfo = async (userAddress: any) => {
+    if (!userAddress) return;
+    const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
 
-  //   const walletAddress = address; // first account in MetaMask
-  //   const signer = provider.getSigner(walletAddress);
+    const walletAddress = address; // first account in MetaMask
+    const signer = provider.getSigner(walletAddress);
 
-  //   // console.log(signer)
-  //   const carContract = new ethers.Contract(contract, ABI, signer);
+    // console.log(signer)
+    const carContract = new ethers.Contract(contract, ABI, signer);
 
-  //   console.log(userAddress);
-  //   const isUser = await carContract.is_user(userAddress);
+    console.log(userAddress);
+    const isUser = await carContract.is_user(userAddress);
 
-  //   if (!isUser) return "";
+    if (!isUser) return "";
 
-  //   let userInfo = await carContract.userInfo(userAddress);
-  //   setUserContactNumber(userInfo?.phone);
-  // };
+    let userInfo = await carContract.userInfo(userAddress);
+    setUserContactNumber(userInfo?.phone);
+  };
 
   // useEffect(()=> {
   //   getUserInfo()
@@ -195,7 +209,8 @@ const AccountPage: NextPage = () => {
   //   await switchNetwork?.(chainId.polygonMumbai)
   // }
   let user = ride?.traveller == address ? 1 : ride?.driver == address ? 2 : 0;
-  // let isActiveRide = ride?.traveller !== "0x0000000000000000000000000000000000000000";
+  let isActiveRide =
+    ride?.traveller !== "0x0000000000000000000000000000000000000000";
   // console.log(ride)
 
   const handleRide = async () => {
@@ -226,10 +241,15 @@ const AccountPage: NextPage = () => {
         .approveRide(rideId)
         .then((tx: any) => {
           console.log("processing");
-          provider.waitForTransaction(tx.hash).then(() => {
+          provider.waitForTransaction(tx.hash).then(async () => {
+            let getUserActivities = await carContract.getUserActivities(
+              address
+            );
+            let isActiveRide = await carContract.isActiveRide(address);
+            setIsActiveRide(isActiveRide);
+            SetUserActivities(getUserActivities);
             console.log("Ride Approved");
             router.push("../dashboard");
-            setIsConnect(false)
           });
         })
         .catch((e: { message: any }) => {
@@ -255,10 +275,15 @@ const AccountPage: NextPage = () => {
         .cancelRide(rideId)
         .then((tx: any) => {
           console.log("processing");
-          provider.waitForTransaction(tx.hash).then(() => {
+          provider.waitForTransaction(tx.hash).then(async () => {
+            let getUserActivities = await carContract.getUserActivities(
+              address
+            );
+            let isActiveRide = await carContract.isActiveRide(address);
+            setIsActiveRide(isActiveRide);
+            SetUserActivities(getUserActivities);
             console.log("Ride Cancelled");
             router.push("../dashboard");
-            setIsConnect(false)
             // router.push('../')
           });
         })

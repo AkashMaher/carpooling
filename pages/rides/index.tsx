@@ -45,7 +45,14 @@ const DashboardPage: NextPage = () => {
     libraries: LIBRARIES,
   });
 
-  const {userInfo, allActiveRides, Loading, setIsConnect} = useContext(userContext)
+  const {
+    userInfo,
+    allActiveRides,
+    Loading,
+    setIsConnect,
+    setIsActiveRide,
+    SetUserActivities,
+  } = useContext(userContext);
   const [userLat, setUserLat] = useState<any>();
   const [userLong, setUserLong] = useState<any>();
 
@@ -56,8 +63,6 @@ const DashboardPage: NextPage = () => {
       // getAddress(position.coords.latitude, position.coords.longitude)
     });
   }, [userLat, userLong]);
-
-
 
   const onSwitchNetwork = async () => {
     await switchNetwork?.(chainId.polygonMumbai);
@@ -92,9 +97,15 @@ const DashboardPage: NextPage = () => {
         .AcceptRide(rideId)
         .then((tx: any) => {
           console.log("processing");
-          provider.waitForTransaction(tx.hash).then(() => {
+          provider.waitForTransaction(tx.hash).then(async () => {
             console.log("Ride Accepted");
-            setIsConnect(false)
+            let getUserActivities = await carContract.getUserActivities(
+              address
+            );
+            let isActiveRide = await carContract.isActiveRide(address);
+            setIsActiveRide(isActiveRide);
+            SetUserActivities(getUserActivities);
+            setIsConnect(false);
             router.push("../rides/active");
           });
         })
@@ -104,7 +115,6 @@ const DashboardPage: NextPage = () => {
         });
     }
   };
-
 
   return (
     <div>

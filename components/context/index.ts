@@ -4,8 +4,4 @@ export const userLocation = createContext("");
 
 export const userShortLocation = createContext("");
 
-
 export const userInfo = createContext([]);
-
-
-

@@ -40,6 +40,8 @@ import { getAddress } from "ethers/lib/utils";
 import { userLocation } from "../../components/context";
 
 import userContext from "../../components/context/user";
+import { toast } from "react-toastify";
+import React from "react";
 // const chainId = '80001'
 type selectDataType = {
   name: string;
@@ -96,7 +98,6 @@ const RequestRide: FC<{
   const originRef: any = useRef();
   const destinationRef: any = useRef();
 
-  const userLocationAddress = useContext(userLocation);
   useEffect(() => {
     if (width < 640) {
       setStyle({ width: "90%", height: "40%" });
@@ -229,8 +230,8 @@ const RequestRide: FC<{
   };
 
   async function updateDetails() {
-  setFetched(false);
-  setDistance("");
+    setFetched(false);
+    setDistance("");
     setDuration("");
     setCurr("");
     setCost("");
@@ -273,7 +274,6 @@ const RequestRide: FC<{
               <span
                 className="text-blue-500 text-sm cursor-pointer"
                 onClick={() => selectMyLocation()}
-                
               >
                 📍Current location
               </span>
@@ -504,16 +504,43 @@ const SettingPage: NextPage = () => {
   // const [userInfo, setUserInfo] = useState<any>([]);
   // const [costPerKM, setCostPerKM] = useState(10);
 
-  const {userInfo, costPerKM, Loading, checkIfNewUser, setIsConnect} = useContext(userContext)
+  const {
+    userInfo,
+    costPerKM,
+    Loading,
+    checkIfNewUser,
+    setIsConnect,
+    setIsActiveRide,
+    SetUserActivities,
+    onlineDrivers,
+    isLocationActive,
+  } = useContext(userContext);
 
-
-
+  const toastId: any = React.useRef(null);
 
   const onSwitchNetwork = async () => {
     await switchNetwork?.(chainId.polygonMumbai);
   };
 
   const requestRide = async (distance: any, from: any, to: any) => {
+    if (!isLocationActive) {
+      if (!toast.isActive(toastId.current)) {
+        toastId.current = toast("Your Location is not active", {
+          hideProgressBar: true,
+          type: "warning",
+        });
+      }
+      return;
+    }
+    if (onlineDrivers?.length == 0) {
+      if (!toast.isActive(toastId.current)) {
+        toastId.current = toast("No drivers available at your location", {
+          hideProgressBar: true,
+          type: "warning",
+        });
+      }
+      return;
+    }
     // console.log(formData)
     console.log(distance);
     const ethereum = (window as any).ethereum;
@@ -546,48 +573,59 @@ const SettingPage: NextPage = () => {
     _value = ethers.utils.parseUnits(`${_value}`, "ether");
     console.log(_value);
     console.log(allowanceAmt);
-    if (allowanceAmt < _value)
-      return await vINRContract
-        .approve(contract, _value)
-        .then(async (tx: any) => {
-          console.log("approved");
-          const RequestRide = await carContract
-            .requestRide(
-              Math.round(distance) < 1 ? 1 : Math.round(distance),
-              from,
-              to,
-              { from: address }
-            )
-            .then((tx: any) => {
-              console.log("processing");
-              provider.waitForTransaction(tx.hash).then(() => {
-                console.log("New Ride Requested");
-                router.push("../rides/active");
-                setIsConnect(false)
-              });
+    if (allowanceAmt < _value) {
+      await vINRContract.approve(contract, _value).then(async (tx: any) => {
+        console.log("approved");
+        const RequestRide = await carContract
+          .requestRide(
+            Math.round(distance) < 1 ? 1 : Math.round(distance),
+            from,
+            to,
+            { from: address }
+          )
+          .then((tx: any) => {
+            console.log("processing");
+            provider.waitForTransaction(tx.hash).then(async () => {
+              console.log("New Ride Requested");
+              let getUserActivities = await carContract.getUserActivities(
+                address
+              );
+              let isActiveRide = await carContract.isActiveRide(address);
+              setIsActiveRide(isActiveRide);
+              SetUserActivities(getUserActivities);
+              router.push("../rides/active");
+              setIsConnect(false);
             });
-        });
-
-    const RequestRide = await carContract
-      .requestRide(
-        Math.round(distance) < 1 ? 1 : Math.round(distance),
-        from,
-        to,
-        { from: address }
-      )
-      .then((tx: any) => {
-        console.log("processing");
-        provider.waitForTransaction(tx.hash).then(() => {
-          console.log("New Ride Requested");
-          router.push("../rides/active");
-          setIsConnect(false)
-        });
-      })
-
-      .catch((e: { message: any }) => {
-        console.log(e.message);
-        return;
+          });
       });
+    } else {
+      const RequestRide = await carContract
+        .requestRide(
+          Math.round(distance) < 1 ? 1 : Math.round(distance),
+          from,
+          to,
+          { from: address }
+        )
+        .then((tx: any) => {
+          console.log("processing");
+          provider.waitForTransaction(tx.hash).then(async () => {
+            let getUserActivities = await carContract.getUserActivities(
+              address
+            );
+            let isActiveRide = await carContract.isActiveRide(address);
+            setIsActiveRide(isActiveRide);
+            SetUserActivities(getUserActivities);
+            console.log("New Ride Requested");
+            router.push("../rides/active");
+            setIsConnect(false);
+          });
+        })
+
+        .catch((e: { message: any }) => {
+          console.log(e.message);
+          return;
+        });
+    }
   };
 
   // useEffect(() => {

@@ -245,14 +245,14 @@ const SettingPage: NextPage = () => {
     }
     let provider = new ethers.providers.Web3Provider(ethereum);
 
-      const data = {
-      name: (document.getElementById('name') as HTMLInputElement)?.value,
-      age : (document.getElementById('age') as HTMLInputElement)?.value,
-      gender: (document.getElementById('gender') as HTMLInputElement)?.value,
-      phone : (document.getElementById('phone') as HTMLInputElement)?.value,
-      email : (document.getElementById('email') as HTMLInputElement)?.value,
-      role: (document.getElementById('role') as HTMLInputElement)?.value,
-      };
+    const data = {
+      name: (document.getElementById("name") as HTMLInputElement)?.value,
+      age: (document.getElementById("age") as HTMLInputElement)?.value,
+      gender: (document.getElementById("gender") as HTMLInputElement)?.value,
+      phone: (document.getElementById("phone") as HTMLInputElement)?.value,
+      email: (document.getElementById("email") as HTMLInputElement)?.value,
+      role: (document.getElementById("role") as HTMLInputElement)?.value,
+    };
 
     const { name, age, gender, phone, email, role } = data;
     // console.log(data);

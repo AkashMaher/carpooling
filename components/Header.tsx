@@ -20,7 +20,7 @@ const ConnectButton: FC = () => {
   const { disconnect } = useDisconnect();
   const isMounted = useIsMounted();
   const [isOpen, setIsOpen] = useState(false);
-  const {setIsConnect} = useContext(user)
+  const { setIsConnect } = useContext(user);
   const handleClick = () => {
     if (!isConnected) router.push("/login");
     if (isConnected) setIsOpen((prev) => !prev);
@@ -31,7 +31,7 @@ const ConnectButton: FC = () => {
     if (!_value) return;
     if (_value == "disconnect") {
       setIsOpen(false);
-      setIsConnect(false)
+      setIsConnect(false);
       disconnect();
     } else if (_value == "account") {
       setIsOpen(false);

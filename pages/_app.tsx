@@ -10,7 +10,7 @@ import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { publicProvider } from "wagmi/providers/public";
 import Layout from "../components/Layout";
 import "../styles/globals.css";
-
+import { queryClient } from "../react-query/queryClient";
 // const { chains, provider, webSocketProvider } = configureChains(defaultChains, [
 //   publicProvider(),
 // ])
@@ -50,11 +50,14 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     //   </WagmiConfig>
     //   <ReactQueryDevtools initialIsOpen={false} />
     // </QueryClientProvider>
-    <WagmiConfig client={client}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </WagmiConfig>
+    <QueryClientProvider client={queryClient}>
+      <WagmiConfig client={client}>
+        <Layout>
+          <Component {...pageProps} />
+          <ToastContainer />
+        </Layout>
+      </WagmiConfig>
+    </QueryClientProvider>
   );
 }
 

@@ -23,17 +23,23 @@ const DashboardPage: NextPage = () => {
   const router = useRouter();
   // const [Loading, setLoading] = useState(false);
   // const [userInfo, setUserInfo] = useState<any>([]);
-  
+
   // const [isActiveRide, setIsActiveRide] = useState(false);
   // const [userRole, setUserRole] = useState(0);
   // const [userBalance, setUserBalance] = useState(0);
   // const [userActivities, SetUserActivities] = useState<any>([]);
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
-  
 
-
-  const {userInfo, userActivities, userRole, isActiveRide, userBalance, setUserBalance, Loading} = useContext(userContext)
+  const {
+    userInfo,
+    userActivities,
+    userRole,
+    isActiveRide,
+    userBalance,
+    setUserBalance,
+    Loading,
+  } = useContext(userContext);
   // const checkUser = async () => {
   //   if (!isConnected) return router.push("./login");
   //   if (userInfo?.name) return;
@@ -141,26 +147,19 @@ const DashboardPage: NextPage = () => {
                   delay: 0.5,
                 }}
               >
-                <div>
-                  <h1 className="text-2xl font-bold ">User Dashboard</h1>
-                  <br></br>
-                  <p>Available Balance: {userBalance} INR</p>
-                  <button
-                    className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg"
-                    onClick={() => handleClaim()}
-                  >
-                    claim
-                  </button>
-                  {/* <ul>
-            <li>User Id: {`${(userInfo?.user_id)?.toNumber()}`}</li>
-            <li>Name: {userInfo?.name}</li>
-            <li>Wallet Address: {address?address:''}</li>
-            <li>Mobile Number: {userInfo?.phone}</li>
-            <li>Email Id: {userInfo?.email}</li>
-            <li>Age: {(userInfo?.age)?.toNumber()}</li>
-            <li>Role: {(userInfo?.role)?.toNumber()==2?"Driver":(userInfo.role)?.toNumber()==1?"Traveller":''}</li>
-        </ul> */}
-                </div>
+                {userInfo?.role == 2 && (
+                  <div>
+                    <h1 className="text-2xl font-bold ">User Dashboard</h1>
+                    <br></br>
+                    <p>Available Balance: {userBalance} INR</p>
+                    <button
+                      className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg"
+                      onClick={() => handleClaim()}
+                    >
+                      claim
+                    </button>
+                  </div>
+                )}
                 <br></br>
                 {/* <p>Account setting</p> */}
                 <button

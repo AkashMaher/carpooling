@@ -27,7 +27,7 @@ const AccountPage: NextPage = () => {
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
 
-  const {userInfo, Loading} = useContext(userContext)
+  const { userInfo, Loading } = useContext(userContext);
 
   // console.log(user)
   // const checkUser = async () => {

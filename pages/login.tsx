@@ -157,21 +157,20 @@ const ConnectPage: NextPage = () => {
     connector: new InjectedConnector(),
   });
   const { disconnect } = useDisconnect();
-  const {setIsConnect, isUser, setUser} = useContext(userContext)
+  const { setIsConnect, isUser, setUser } = useContext(userContext);
   const handleConnect = async () => {
     setLoading(true);
     await connect();
     await checkUser();
-    setIsConnect(false)
+    setIsConnect(false);
   };
 
-  
   // console.log(isConnected)
   const checkUser = async () => {
     if (!address) {
       setLoading(false);
       setIfNewUser(false);
-      return console.log('hell');
+      return console.log("hell");
     }
     // let provider = new ethers.providers.Web3Provider(ethereum)
     const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
@@ -185,8 +184,10 @@ const ConnectPage: NextPage = () => {
     const is_user = await carContract.is_user(address);
     if (is_user) {
       setIfNewUser(false);
+    } else {
+      setIfNewUser(true);
     }
-    if (isConnected && is_user) router.back();
+    if (isConnected && is_user && router.back.name) router.back();
     setUser(is_user);
     setLoading(false);
     // console.log(isUser)
@@ -250,11 +251,16 @@ const ConnectPage: NextPage = () => {
       });
     }
   });
+
   useEffect(() => {
-    if (isConnected ) {
-      if(isUser) router.back();
-    checkUser();
-  }
+    if (isConnected) {
+      if (isUser && router.back.name) {
+        router.back();
+      } else {
+        router.push("/");
+      }
+      checkUser();
+    }
   });
   // let checkIfNewUser = isConnected && !isUser
 
@@ -269,10 +275,10 @@ const ConnectPage: NextPage = () => {
           {!isMounted && <p className="text-center">Loading...</p>}
           {isMounted && (
             <div>
-              <h1 className="text-2xl font-bold ">
+              <h1 className="text-2xl font-bold">
                 {!isConnected
                   ? "Login with metamask"
-                  : !isUser 
+                  : !isUser
                   ? "Sign Up"
                   : "Login"}
               </h1>
@@ -287,14 +293,22 @@ const ConnectPage: NextPage = () => {
                   <>
                     {" "}
                     <br></br>{" "}
-                    <button onClick={() => handleConnect()}>
+                    {/* <button onClick={() => handleConnect()}>
                       Connect Wallet
-                    </button>{" "}
+                    </button>{" "} */}
+                    <div className="justify-center">
+                      <button
+                        className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg"
+                        onClick={() => handleConnect()}
+                      >
+                        Connect Wallet
+                      </button>
+                    </div>
                   </>
                 )}
               </div>
 
-              {!isUser && (
+              {checkIfNewUser && isConnected && (
                 <>
                   <CreateAccount
                     handleUserInput={handleUserInput}

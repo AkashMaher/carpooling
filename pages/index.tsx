@@ -38,7 +38,16 @@ const Home = () => {
   // const [isActiveRide, setIsActiveRide] = useState(false);
   // const [userRole, setUserRole] = useState(0);
 
-  const {userRole, isActiveRide, userInfo, isUser, setUserRole, setIsActiveRide, setUserInfo, setUser} = useContext(user)
+  const {
+    userRole,
+    isActiveRide,
+    userInfo,
+    isUser,
+    setUserRole,
+    setIsActiveRide,
+    setUserInfo,
+    setUser,
+  } = useContext(user);
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
@@ -50,7 +59,7 @@ const Home = () => {
       setUser(false);
       return;
     }
-    if (userInfo?.name || checkIfNewUser) return;
+    if (userInfo?.name || checkIfNewUser) return setLoading(false);
     // let provider = new ethers.providers.Web3Provider(ethereum)
     const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
 

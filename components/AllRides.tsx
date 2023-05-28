@@ -60,7 +60,9 @@ const ActivityItem: FC<{
       travelMode: google.maps.TravelMode.DRIVING,
     });
     let distance = results.routes[0].legs[0].distance.text;
-    setDistanceFrom(Math.round(distance.split(" ")[0]));
+    let d = Math.round(distance.split(" ")[0]);
+    setDistanceFrom(d);
+    console.log(distance, `(~ ${d} km)`);
     return distance;
   }
 
