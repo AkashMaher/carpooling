@@ -253,7 +253,7 @@ const ConnectPage: NextPage = () => {
   });
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && !Loading) {
       if (isUser && router.back.name) {
         router.back();
       } else {
