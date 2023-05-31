@@ -348,8 +348,8 @@ const RequestRide: FC<{
             >
               {isChainCorrect
                 ? !Fetched
-                  ? "Request a Ride"
-                  : "Confirm Request"
+                  ? "Check Fare"
+                  : "Confirm Ride"
                 : "Switch Network"}
             </button>
             {

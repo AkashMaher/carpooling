@@ -152,7 +152,7 @@ const ConnectPage: NextPage = () => {
   const { address, isConnected } = useAccount();
   const [Loading, setLoading] = useState(true);
   const [formData, setFormData] = useState(initialFormState);
-  const [checkIfNewUser, setIfNewUser] = useState(false);
+  const [checkIfNewUser, setIfNewUser] = useState(true);
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
@@ -183,9 +183,9 @@ const ConnectPage: NextPage = () => {
 
     const is_user = await carContract.is_user(address);
     if (is_user) {
-      setIfNewUser(false);
+      setIfNewUser(is_user);
     } else {
-      setIfNewUser(true);
+      setIfNewUser(is_user);
     }
     if (isConnected && is_user && router.back.name) router.back();
     setUser(is_user);
@@ -308,7 +308,7 @@ const ConnectPage: NextPage = () => {
                 )}
               </div>
 
-              {checkIfNewUser && isConnected && (
+              {checkIfNewUser && isConnected && !Loading &&  (
                 <>
                   <CreateAccount
                     handleUserInput={handleUserInput}
