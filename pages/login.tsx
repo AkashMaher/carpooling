@@ -154,6 +154,7 @@ const ConnectPage: NextPage = () => {
   const [Loading, setLoading] = useState(true);
   const [formData, setFormData] = useState(initialFormState);
   const [checkIfNewUser, setIfNewUser] = useState(true);
+  const [dataFetched, setDataFetched] = useState(false)
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
@@ -194,6 +195,7 @@ const ConnectPage: NextPage = () => {
     setUser(is_user);
     setLoading(false);
     console.log("is User :", is_user);
+    setDataFetched(true)
   };
 
   const handleUserInput = (_name: any, _value: any) => {
@@ -316,7 +318,7 @@ const ConnectPage: NextPage = () => {
                 )}
               </div>
 
-              {checkIfNewUser && isConnected && !Loading && (
+              {checkIfNewUser && dataFetched && (
                 <>
                   <CreateAccount
                     handleUserInput={handleUserInput}
