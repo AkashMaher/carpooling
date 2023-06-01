@@ -245,18 +245,24 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         location: [userLong, userLat],
       };
       UpdateDriver(data);
-    } else {
-      console.log("user is not a driver");
-    }
+    } 
   }, [userLong, userLat, userInfo?.role, address, UpdateDriver, isActiveRide]);
 
   useEffect(() => {
     if (window.ethereum) {
-      (window as any).ethereum.on("accountsChanged", function (accounts: any) {
+      (window as any).ethereum.on("accountsChanged", async function (accounts: any) {
+        setLoading(true)
         setIsConnect(false);
         setUserInfo([]);
-        checkUser();
-        return;
+        SetUserActivities([]);
+        setUserRole(0);
+        setUserBalance(0);
+        setIsActiveRide(false);
+        setActiveRides([]);
+        setRide([]);
+        // await checkUser();
+        // router.push("/login")
+        return setLoading(false);
       });
     }
   });
@@ -269,11 +275,10 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   // },[!isConnect])
 
   useEffect(() => {
-    // if(isConnected && !userInfo){
     checkUser();
-    // }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected, address]);
 
   const getAddress = async (lat: any, long: any) => {
     if ((!lat && !long) || userLocationShortName) return;

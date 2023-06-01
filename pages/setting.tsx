@@ -174,7 +174,6 @@ const SettingPage: NextPage = () => {
     await checkUser();
   };
 
-  console.log(isConnected);
   const checkUser = async () => {
     if (!isConnected) return router.push("./login");
     if (!address) {
@@ -211,16 +210,16 @@ const SettingPage: NextPage = () => {
     // console.log(isUser)
   };
 
-  useEffect(() => {
-    if (window.ethereum) {
-      (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-        setUserInfo([]);
-        setLoading(true);
-        checkUser();
-        return;
-      });
-    }
-  });
+  // useEffect(() => {
+  //   if (window.ethereum) {
+  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
+  //       setUserInfo([]);
+  //       setLoading(true);
+  //       checkUser();
+  //       return;
+  //     });
+  //   }
+  // });
   const handleUserInput = (_name: any, _value: any) => {
     if (!_name || !_value) return;
     console.log(_value);
@@ -314,15 +313,15 @@ const SettingPage: NextPage = () => {
         return;
       });
   };
-  useEffect(() => {
-    if (window.ethereum) {
-      (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-        // Time to reload your interface with accounts[0]!
-        checkUser();
-        return;
-      });
-    }
-  });
+  // useEffect(() => {
+  //   if (window.ethereum) {
+  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
+  //       // Time to reload your interface with accounts[0]!
+  //       checkUser();
+  //       return;
+  //     });
+  //   }
+  // });
   useEffect(() => {
     if (!address) router.push("./login");
     // if(isConnected && isUser) router.push('./account')

@@ -148,9 +148,10 @@ const INITIAL_ACTIVITY_STATE: InitialActivityStateType = {
   currentPage: 1,
 };
 
-const UserActivity: FC<{ userActivities: ActivityType[] }> = ({
-  userActivities,
-}) => {
+const UserActivity: FC<{
+  userActivities: ActivityType[];
+  Loading: boolean;
+}> = ({ userActivities, Loading }) => {
   const [{ activity, totalPages, currentPage }, setActivityState] = useState(
     INITIAL_ACTIVITY_STATE
   );
@@ -185,6 +186,7 @@ const UserActivity: FC<{ userActivities: ActivityType[] }> = ({
 
   return (
     <>
+      {!Loading && <>
       <div
         className="pb-20 md:px-4 bg-[#e6e0e0] rounded-lg
   gap-20 w-full  max-w-full mx-auto px-2 lg:px-6 py-9 lg:h-[928px] scrollbar-thin scrollbar-thumb-[#5A5B61] scrollbar-thumb-rounded-lg scrollbar-track-[#1F2021] overflow-y-scroll"
@@ -233,6 +235,7 @@ const UserActivity: FC<{ userActivities: ActivityType[] }> = ({
           currentPage={currentPage}
         />
       </div>
+      </>}
     </>
   );
 };
