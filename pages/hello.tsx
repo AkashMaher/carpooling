@@ -244,15 +244,15 @@ const ConnectPage: NextPage = () => {
         return;
       });
   };
-  useEffect(() => {
-    if (window.ethereum) {
-      (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-        // Time to reload your interface with accounts[0]!
-        checkUser();
-        return;
-      });
-    }
-  });
+  // useEffect(() => {
+  //   if (window.ethereum) {
+  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
+  //       // Time to reload your interface with accounts[0]!
+  //       checkUser();
+  //       return;
+  //     });
+  //   }
+  // });
 
   useEffect(() => {
     if (isConnected) {

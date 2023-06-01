@@ -82,17 +82,17 @@ const Home = () => {
     setLoading(false);
     // console.log(isUser)
   };
-  useEffect(() => {
-    if (window.ethereum) {
-      (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-        // Time to reload your interface with accounts[0]!
-        setUserInfo([]);
-        setLoading(true);
-        checkUser();
-        return;
-      });
-    }
-  });
+  // useEffect(() => {
+  //   if (window.ethereum) {
+  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
+  //       // Time to reload your interface with accounts[0]!
+  //       setUserInfo([]);
+  //       setLoading(true);
+  //       checkUser();
+  //       return;
+  //     });
+  //   }
+  // });
   useEffect(() => {
     // if(isConnected && isUser) router.push('./account')
     checkUser();
@@ -119,7 +119,7 @@ const Home = () => {
             <div className="cursor-pointer">
               {!isUser && (
                 <button
-                  className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg"
+                  className="text-2xl sm:text-5xl outline-none mr-4 mt-4 w-50 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-[4rem]"
                   onClick={() => router.push("/login")}
                 >
                   Login
@@ -157,13 +157,13 @@ const Home = () => {
                         : "";
                     }}
                   >
-                    {isActiveRide
+                    {userRole==0?"Loading":isActiveRide
                       ? "Active Ride"
                       : !isActiveRide && userRole == 1
                       ? "Book A Ride"
                       : !isActiveRide && userRole == 2
                       ? "Check Available Rides"
-                      : ""}
+                      : ''}
                   </button>
                 </>
               )}

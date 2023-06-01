@@ -165,16 +165,16 @@ const AccountPage: NextPage = () => {
     await calculateRoute(getRide?.from, getRide?.to);
   };
   // console.log(ride)
-  useEffect(() => {
-    if (window.ethereum) {
-      (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-        setRide([]);
-        setLoading(true);
-        checkUser();
-        return;
-      });
-    }
-  });
+  // useEffect(() => {
+  //   if (window.ethereum) {
+  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
+  //       setRide([]);
+  //       setLoading(true);
+  //       checkUser();
+  //       return;
+  //     });
+  //   }
+  // });
 
   useEffect(() => {
     if (user) return;

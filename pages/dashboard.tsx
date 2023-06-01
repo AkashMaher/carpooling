@@ -39,6 +39,7 @@ const DashboardPage: NextPage = () => {
     userBalance,
     setUserBalance,
     Loading,
+    setLoading,
   } = useContext(userContext);
   // const checkUser = async () => {
   //   if (!isConnected) return router.push("./login");
@@ -70,11 +71,10 @@ const DashboardPage: NextPage = () => {
   // useEffect(() => {
   //   if (window.ethereum) {
   //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-  //       setUserInfo([]);
   //       setLoading(true);
-  //       checkUser();
   //       return;
   //     });
+  //     return;
   //   }
   // });
 
@@ -123,7 +123,6 @@ const DashboardPage: NextPage = () => {
         return;
       });
   };
-
   return (
     <div>
       <Head>
@@ -162,7 +161,9 @@ const DashboardPage: NextPage = () => {
                 )}
                 <br></br>
                 {/* <p>Account setting</p> */}
-                <button
+                
+                {!Loading &&
+                <><button
                   className="outline-none mr-4 mt-4 w-30 h-full bg-[#585858] py-[1%] px-[9.5%] text-white rounded-lg"
                   onClick={() => {
                     router.push("./account");
@@ -208,6 +209,8 @@ const DashboardPage: NextPage = () => {
                 >
                   Account Settings
                 </button>
+                </>}
+
                 <br></br>
                 <br></br>
                 <h1 className="text-2xl font-bold ">User Activities</h1>
@@ -215,7 +218,7 @@ const DashboardPage: NextPage = () => {
                 <br></br>
               </motion.div>
               <br></br>
-              <UserActivity userActivities={userActivities} />
+              {!Loading && <UserActivity userActivities={userActivities} Loading={Loading} />}
             </>
           )}
         </main>
