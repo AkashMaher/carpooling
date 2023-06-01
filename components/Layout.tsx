@@ -210,7 +210,18 @@ const Layout: FC<LayoutProps> = ({ children }) => {
   );
 
   useEffect(() => {
-    setDrivers(driversData?.data?.data ? driversData?.data?.data : []);
+    // setDrivers(driversData?.data?.data ? driversData?.data?.data : []);
+    let arr = []
+    for (let i = 0; i < driversData?.data?.data?.length; i++) {
+      let lat = driversData?.data?.data?.[i]?.location[1]
+      let lng = driversData?.data?.data?.[i]?.location[0]
+      arr.push({lat, lng})
+      
+    }
+    console.log("arr");
+    console.log(arr);
+    setDrivers(arr);
+    console.log(driversData?.data?.data?.[0]?.location);
   }, [driversData?.data, userLong, userLat]);
 
   // async function checkAndUpdate() {
@@ -261,7 +272,8 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     // if(isConnected && !userInfo){
     checkUser();
     // }
-  });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[]);
 
   const getAddress = async (lat: any, long: any) => {
     if ((!lat && !long) || userLocationShortName) return;

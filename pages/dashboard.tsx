@@ -206,7 +206,7 @@ const DashboardPage: NextPage = () => {
                     router.push("./setting");
                   }}
                 >
-                  Account Setting
+                  Account Settings
                 </button>
                 <br></br>
                 <br></br>

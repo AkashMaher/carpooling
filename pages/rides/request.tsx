@@ -42,11 +42,14 @@ import { userLocation } from "../../components/context";
 import userContext from "../../components/context/user";
 import { toast } from "react-toastify";
 import React from "react";
+import useIsMounted from "../../utils/hooks/useIsMounted";
 // const chainId = '80001'
 type selectDataType = {
   name: string;
   value: string;
 };
+
+
 
 const LIBRARIES: any = ["places"];
 const googleMapApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
@@ -55,12 +58,18 @@ const RequestRide: FC<{
   requestRide: (distance: any, from: any, to: any) => void;
   costPerKM: number;
   setFormData: (_value: any) => void;
-}> = ({ requestRide, costPerKM, setFormData }) => {
+}> = ({ requestRide, costPerKM, setFormData}) => {
   const { address } = useAccount();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: googleMapApiKey,
     libraries: LIBRARIES,
   });
+  
+  const driverCoordinates = useRef([
+    { lat: 37.773972, lng: -122.431297 },
+    { lat: 37.792318, lng: -122.396116 },
+    { lat: 37.739837, lng: -122.467549 },
+  ]);
 
   const [map, setMap] = useState<any>();
   const [directionsResponse, setDirectionsResponse] = useState<any>();
@@ -79,7 +88,11 @@ const RequestRide: FC<{
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const [isChainCorrect, setIsChainCorrect] = useState(true);
+  const [driversCoordinates,setDriversCoordinates] = useState<any>([]);
   const chainID = 80001;
+
+
+    const {onlineDrivers} = useContext(userContext);
   useEffect(() => {
     if (!chainID) return;
     if (chain?.id === chainID) {
@@ -94,6 +107,10 @@ const RequestRide: FC<{
   const onSwitchNetwork = async () => {
     await switchNetwork?.(chainID);
   };
+
+  useEffect(() => {
+    setDriversCoordinates(onlineDrivers);
+  },[onlineDrivers])
 
   const originRef: any = useRef();
   const destinationRef: any = useRef();
@@ -131,7 +148,11 @@ const RequestRide: FC<{
   }, [userLat, userLong]);
 
   if (!isLoaded) {
-    return <div>LOADING</div>;
+    return (
+      <div>
+        <p className="text-center">Loading...</p>
+      </div>
+    );
   }
 
   async function calculateRoute() {
@@ -236,6 +257,29 @@ const RequestRide: FC<{
     setCurr("");
     setCost("");
   }
+
+  // const hahah = driversCoordinates?.map(
+  //   (location: any, index: React.Key | null | undefined) => {
+  //     {
+  //       console.log(location.location);
+  //       return location.location;
+  //     }
+  //   }
+  // );
+  // console.log("mapped data", hahah);
+   
+  const fitBounds = () => {
+    if (!map) return;
+    const bounds = new window.google.maps.LatLngBounds();
+    driversCoordinates.forEach((coordinates: any) => {
+      bounds.extend(new window.google.maps.LatLng(coordinates));
+    });
+    console.log("H")
+    console.log(bounds);
+    // bounds.extend(centerCoordinates.current);
+    map?.fitBounds(bounds);
+  };
+
   return (
     <>
       <div className="flex flex-col lg:flex-row justify-between gap-6 mt-8">
@@ -360,6 +404,7 @@ const RequestRide: FC<{
                 clear
               </button>
             }
+            
           </div>
         </motion.div>
         <div className="pt-20 lg:pl-20">
@@ -387,6 +432,20 @@ const RequestRide: FC<{
                   }}
                   onLoad={(map) => setMap(map)}
                 >
+                  {driversCoordinates.map(
+                    (coordinates: any, index: React.Key | null | undefined) => (
+                      <Marker
+                        key={index}
+                        position={coordinates}
+                        options={{
+                          icon: {
+                            url: "https://d1a3f4spazzrp4.cloudfront.net/car-types/map70px/product/map-uberx.png",
+                            scaledSize: new google.maps.Size(33, 33),
+                          },
+                        }}
+                      />
+                    )
+                  )}
                   <Marker position={center} />
                   {directionsResponse && (
                     <div>
@@ -402,9 +461,9 @@ const RequestRide: FC<{
                           },
                         }}
                       />
+
                       <Marker
                         clickable={false}
-                        draggable={true}
                         position={
                           directionsResponse.routes[0].legs[0].end_location
                         }
@@ -521,6 +580,7 @@ const SettingPage: NextPage = () => {
   const onSwitchNetwork = async () => {
     await switchNetwork?.(chainId.polygonMumbai);
   };
+
 
   const requestRide = async (distance: any, from: any, to: any) => {
     if (!isLocationActive) {

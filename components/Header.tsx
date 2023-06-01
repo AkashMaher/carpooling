@@ -101,7 +101,7 @@ const ConnectButton: FC = () => {
             className="flex items-center gap-3  -bottom-[2rem] cursor-pointer hover:scale-105 transition-transform hover:text-yellow-500"
           >
             <AiOutlineSetting fontSize={20} />
-            <span>Setting</span>
+            <span>Settings</span>
           </p>
           <p
             onClick={() => handleBtn("disconnect")}
