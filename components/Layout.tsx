@@ -259,7 +259,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
         return;
       });
     }
-  },[]);
+  });
 
   // useEffect(()=> {
   //   setUserInfo([]);
@@ -272,6 +272,7 @@ const Layout: FC<LayoutProps> = ({ children }) => {
     // if(isConnected && !userInfo){
     checkUser();
     // }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   },[]);
 
   const getAddress = async (lat: any, long: any) => {
