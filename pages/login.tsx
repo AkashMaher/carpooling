@@ -288,9 +288,9 @@ const ConnectPage: NextPage = () => {
               <h1 className="text-2xl font-bold">
                 {!isConnected
                   ? "Login with metamask"
-                  : !isUser
+                  : !isUser && dataFetched
                   ? "Sign Up"
-                  : "Login"}
+                  : isUser && dataFetched?"Login":"Login/Sign up"}
               </h1>
               <div>
                 {isConnected && (

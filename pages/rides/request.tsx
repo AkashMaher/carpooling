@@ -64,12 +64,6 @@ const RequestRide: FC<{
     googleMapsApiKey: googleMapApiKey,
     libraries: LIBRARIES,
   });
-  
-  const driverCoordinates = useRef([
-    { lat: 37.773972, lng: -122.431297 },
-    { lat: 37.792318, lng: -122.396116 },
-    { lat: 37.739837, lng: -122.467549 },
-  ]);
 
   const [map, setMap] = useState<any>();
   const [directionsResponse, setDirectionsResponse] = useState<any>();
@@ -108,9 +102,22 @@ const RequestRide: FC<{
     await switchNetwork?.(chainID);
   };
 
+ const fitBounds = () => {
+    if (!map) return;
+    if (!driversCoordinates) return;
+    const bounds = new window.google.maps.LatLngBounds();
+      driversCoordinates.forEach((coordinates:any) => {
+      bounds.extend(new window.google.maps.LatLng(coordinates));
+    });
+    // bounds.extend(centerCoordinates.current);
+    map?.fitBounds(bounds);
+  };
+
   useEffect(() => {
     setDriversCoordinates(onlineDrivers);
-  },[onlineDrivers])
+    fitBounds()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[onlineDrivers, driversCoordinates])
 
   const originRef: any = useRef();
   const destinationRef: any = useRef();
@@ -268,17 +275,7 @@ const RequestRide: FC<{
   // );
   // console.log("mapped data", hahah);
    
-  const fitBounds = () => {
-    if (!map) return;
-    const bounds = new window.google.maps.LatLngBounds();
-    driversCoordinates.forEach((coordinates: any) => {
-      bounds.extend(new window.google.maps.LatLng(coordinates));
-    });
-    console.log("H")
-    console.log(bounds);
-    // bounds.extend(centerCoordinates.current);
-    map?.fitBounds(bounds);
-  };
+
 
   return (
     <>
@@ -432,9 +429,10 @@ const RequestRide: FC<{
                   }}
                   onLoad={(map) => setMap(map)}
                 >
-                  {driversCoordinates.map(
+                  {driversCoordinates !==null && driversCoordinates.map(
                     (coordinates: any, index: React.Key | null | undefined) => (
                       <Marker
+                        zIndex={100}
                         key={index}
                         position={coordinates}
                         options={{
