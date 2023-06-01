@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { motion } from "framer-motion";
 import { ethers } from "ethers";
 import { NextPage } from "next";
@@ -246,7 +245,6 @@ const ConnectPage: NextPage = () => {
       });
   };
   useEffect(() => {
-    console.log("hello");
     if (window.ethereum) {
       (window as any).ethereum.on("accountsChanged", function (accounts: any) {
         // Time to reload your interface with accounts[0]!
@@ -255,7 +253,6 @@ const ConnectPage: NextPage = () => {
       });
     }
   });
-
 
   useEffect(() => {
     if (isConnected) {
@@ -269,7 +266,6 @@ const ConnectPage: NextPage = () => {
       }
     }
   });
-
   // let checkIfNewUser = isConnected && !isUser
 
   return (

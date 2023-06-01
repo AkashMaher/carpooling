@@ -103,6 +103,7 @@ const Home = () => {
     if (!_value) return;
     router.push(`./${_value}`);
   };
+
   return (
     <div>
       <Head>
@@ -119,7 +120,7 @@ const Home = () => {
               {!isUser && (
                 <button
                   className="outline-none mr-4 mt-4 w-30 h-full bg-[#36a909] py-[1%] px-[7.4%] text-white rounded-lg"
-                  onClick={() => handleClick("login")}
+                  onClick={() => router.push("/login")}
                 >
                   Login
                 </button>
