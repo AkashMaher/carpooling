@@ -133,26 +133,53 @@ const Layout: FC<LayoutProps> = ({ children }) => {
       // console.log(signer)
       const carContract = new ethers.Contract(contract, ABI, signer);
 
-      const is_user = await carContract.is_user(address);
+      // const is_user = await carContract.is_user(address);
+      
+      // 
+      // console.log(isUser)
+
+      // let getUser = await carContract.userInfo(address);
+      // let isActiveRide = await carContract.isActiveRide(address);
+      // let balance = await carContract.balance(address);
+      // let getRide = await carContract.activeRide(address);
+      // let getUserActivities = await carContract.getUserActivities(address);
+      // let activeRides = await carContract.getActiveRides();
+      // const getCost = await carContract.costPerKM();
+      // 
+      // if ((getRide?.time).toNumber()) {
+      //   let d = new Date((getRide?.time).toNumber() * 1000);
+      //   time = d.toLocaleString();
+      // }
+
+      const [
+        is_user,
+        getUser,
+        isActiveRide,
+        balance,
+        getRide,
+        getUserActivities,
+        activeRides,
+        getCost,
+      ] = await Promise.all([
+        carContract.is_user(address),
+        carContract.userInfo(address),
+        carContract.isActiveRide(address),
+        carContract.balance(address),
+        carContract.activeRide(address),
+        carContract.getUserActivities(address),
+        carContract.getActiveRides(),
+        carContract.costPerKM(),
+      ]);
+
       if (is_user || isConnected) {
         setIfNewUser(true);
       }
-      if (!is_user) return setUser(is_user);
-      // if (!isUser) return router.push("./login");
-      // console.log(isUser)
-
-      let getUser = await carContract.userInfo(address);
-      let isActiveRide = await carContract.isActiveRide(address);
-      let balance = await carContract.balance(address);
-      let getRide = await carContract.activeRide(address);
-      let getUserActivities = await carContract.getUserActivities(address);
-      let activeRides = await carContract.getActiveRides();
-      const getCost = await carContract.costPerKM();
-      let time = "";
-      if ((getRide?.time).toNumber()) {
-        let d = new Date((getRide?.time).toNumber() * 1000);
-        time = d.toLocaleString();
+      if (!is_user){ 
+        router.push("./login");
+        setUser(is_user);
+        return
       }
+      let time = "";
       let Ride: any = {};
       Ride["costPerKM"] = (getRide?.costPerKM).toNumber();
       Ride["id"] = (getRide?.id).toNumber();

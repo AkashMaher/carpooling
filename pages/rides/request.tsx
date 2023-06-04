@@ -49,8 +49,6 @@ type selectDataType = {
   value: string;
 };
 
-
-
 const LIBRARIES: any = ["places"];
 const googleMapApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
 
@@ -58,7 +56,7 @@ const RequestRide: FC<{
   requestRide: (distance: any, from: any, to: any) => void;
   costPerKM: number;
   setFormData: (_value: any) => void;
-}> = ({ requestRide, costPerKM, setFormData}) => {
+}> = ({ requestRide, costPerKM, setFormData }) => {
   const { address } = useAccount();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: googleMapApiKey,
@@ -82,11 +80,10 @@ const RequestRide: FC<{
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   const [isChainCorrect, setIsChainCorrect] = useState(true);
-  const [driversCoordinates,setDriversCoordinates] = useState<any>([]);
+  const [driversCoordinates, setDriversCoordinates] = useState<any>([]);
   const chainID = 80001;
 
-
-    const {onlineDrivers} = useContext(userContext);
+  const { onlineDrivers } = useContext(userContext);
   useEffect(() => {
     if (!chainID) return;
     if (chain?.id === chainID) {
@@ -102,11 +99,11 @@ const RequestRide: FC<{
     await switchNetwork?.(chainID);
   };
 
- const fitBounds = () => {
+  const fitBounds = () => {
     if (!map) return;
     if (!driversCoordinates) return;
     const bounds = new window.google.maps.LatLngBounds();
-      driversCoordinates.forEach((coordinates:any) => {
+    driversCoordinates.forEach((coordinates: any) => {
       bounds.extend(new window.google.maps.LatLng(coordinates));
     });
     // bounds.extend(centerCoordinates.current);
@@ -115,9 +112,9 @@ const RequestRide: FC<{
 
   useEffect(() => {
     setDriversCoordinates(onlineDrivers);
-    fitBounds()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[onlineDrivers, driversCoordinates])
+    fitBounds();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onlineDrivers, driversCoordinates]);
 
   const originRef: any = useRef();
   const destinationRef: any = useRef();
@@ -188,18 +185,7 @@ const RequestRide: FC<{
     setFetched(true);
   }
 
-  // const getAddress = (lat:any,long:any) => {
-  // return axios.get(`https://carpool.ak1223.repl.co/get-address/${lat}/${long}`)
-  //   .then(res => res.data)
-  //   .then(json => {
-  //     if (!json?.address) {
-  //       return null
-  //     }
-  //     let address = json?.address
-  //     return {address}
-  //   })
 
-  // }
 
   async function selectMyLocation() {
     // setMyLocation(true)
@@ -224,10 +210,7 @@ const RequestRide: FC<{
     }
   }
 
-  // console.log(userLat,userLong)
-  // useEffect(() => {
-  //   calculateRoute()
-  // },[active])
+
 
   function clearRoute() {
     setDirectionsResponse(null);
@@ -274,8 +257,6 @@ const RequestRide: FC<{
   //   }
   // );
   // console.log("mapped data", hahah);
-   
-
 
   return (
     <>
@@ -401,7 +382,6 @@ const RequestRide: FC<{
                 clear
               </button>
             }
-            
           </div>
         </motion.div>
         <div className="pt-20 lg:pl-20">
@@ -429,21 +409,25 @@ const RequestRide: FC<{
                   }}
                   onLoad={(map) => setMap(map)}
                 >
-                  {driversCoordinates !==null && driversCoordinates.map(
-                    (coordinates: any, index: React.Key | null | undefined) => (
-                      <Marker
-                        zIndex={100}
-                        key={index}
-                        position={coordinates}
-                        options={{
-                          icon: {
-                            url: "https://d1a3f4spazzrp4.cloudfront.net/car-types/map70px/product/map-uberx.png",
-                            scaledSize: new google.maps.Size(33, 33),
-                          },
-                        }}
-                      />
-                    )
-                  )}
+                  {driversCoordinates !== null &&
+                    driversCoordinates.map(
+                      (
+                        coordinates: any,
+                        index: React.Key | null | undefined
+                      ) => (
+                        <Marker
+                          zIndex={100}
+                          key={index}
+                          position={coordinates}
+                          options={{
+                            icon: {
+                              url: "https://d1a3f4spazzrp4.cloudfront.net/car-types/map70px/product/map-uberx.png",
+                              scaledSize: new google.maps.Size(33, 33),
+                            },
+                          }}
+                        />
+                      )
+                    )}
                   <Marker position={center} />
                   {directionsResponse && (
                     <div>
@@ -579,7 +563,6 @@ const SettingPage: NextPage = () => {
     await switchNetwork?.(chainId.polygonMumbai);
   };
 
-
   const requestRide = async (distance: any, from: any, to: any) => {
     if (!isLocationActive) {
       if (!toast.isActive(toastId.current)) {
@@ -645,10 +628,10 @@ const SettingPage: NextPage = () => {
             console.log("processing");
             provider.waitForTransaction(tx.hash).then(async () => {
               console.log("New Ride Requested");
-              let getUserActivities = await carContract.getUserActivities(
-                address
-              );
-              let isActiveRide = await carContract.isActiveRide(address);
+              const [getUserActivities, isActiveRide] = await Promise.all([
+                carContract.getUserActivities(address),
+                carContract.isActiveRide(address),
+              ]);
               setIsActiveRide(isActiveRide);
               SetUserActivities(getUserActivities);
               router.push("../rides/active");

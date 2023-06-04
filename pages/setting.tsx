@@ -313,21 +313,13 @@ const SettingPage: NextPage = () => {
         return;
       });
   };
-  // useEffect(() => {
-  //   if (window.ethereum) {
-  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-  //       // Time to reload your interface with accounts[0]!
-  //       checkUser();
-  //       return;
-  //     });
-  //   }
-  // });
+
   useEffect(() => {
     if (!address) router.push("./login");
     // if(isConnected && isUser) router.push('./account')
     checkUser();
   });
-  // let checkIfNewUser = isConnected && !isUser
+
 
   return (
     <div>
@@ -340,16 +332,6 @@ const SettingPage: NextPage = () => {
           {Loading && <p className="text-center">Loading...</p>}
           {!Loading && (
             <div>
-              {/* <div>
-                {isConnected && 
-                <>
-                <button onClick={() => disconnect()}>Disconnect</button>
-                <p> Connected to : {address ? address : ''} </p>
-                </>
-                }
-                {!isConnected && <> <button onClick={() => handleConnect()}>Connect Wallet</button> </>}
-            </div> */}
-
               {checkIfNewUser && (
                 <>
                   <UpdateAccount

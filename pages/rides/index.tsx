@@ -68,6 +68,12 @@ const DashboardPage: NextPage = () => {
     await switchNetwork?.(chainId.polygonMumbai);
   };
 
+    useEffect(() => {
+      if (userInfo?.role == 1) {
+        router.push("./dashboard");
+      }
+    }, [router, userInfo?.role]);
+    
   const handleRide = async (ride: ActivityType) => {
     const { id, status } = ride;
     const ethereum = (window as any).ethereum;
@@ -99,10 +105,10 @@ const DashboardPage: NextPage = () => {
           console.log("processing");
           provider.waitForTransaction(tx.hash).then(async () => {
             console.log("Ride Accepted");
-            let getUserActivities = await carContract.getUserActivities(
-              address
-            );
-            let isActiveRide = await carContract.isActiveRide(address);
+           const [getUserActivities, isActiveRide] = await Promise.all([
+             carContract.getUserActivities(address),
+             carContract.isActiveRide(address),
+           ]);
             setIsActiveRide(isActiveRide);
             SetUserActivities(getUserActivities);
             setIsConnect(false);

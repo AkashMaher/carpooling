@@ -60,18 +60,18 @@ const Home = () => {
       return;
     }
     if (userInfo?.name || checkIfNewUser) return setLoading(false);
-    // let provider = new ethers.providers.Web3Provider(ethereum)
-    const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
 
+    const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
     const walletAddress = address; // first account in MetaMask
     const signer = provider.getSigner(walletAddress);
-
-    // console.log(signer)
     const carContract = new ethers.Contract(contract, ABI, signer);
 
-    const isUser = await carContract.is_user(address);
-    let getUser = await carContract.userInfo(address);
-    let isActiveRide = await carContract.isActiveRide(address);
+    const [isUser, getUser, isActiveRide] = await Promise.all([
+      carContract.is_user(address),
+      carContract.userInfo(address),
+      carContract.isActiveRide(address),
+    ]);
+
     if (!isUser || isConnected) {
       setIfNewUser(true);
     }
@@ -80,7 +80,6 @@ const Home = () => {
     setUserInfo(getUser);
     setUser(isUser);
     setLoading(false);
-    // console.log(isUser)
   };
   // useEffect(() => {
   //   if (window.ethereum) {
