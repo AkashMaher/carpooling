@@ -164,17 +164,6 @@ const AccountPage: NextPage = () => {
     await getUserInfo(userAddress);
     await calculateRoute(getRide?.from, getRide?.to);
   };
-  // console.log(ride)
-  // useEffect(() => {
-  //   if (window.ethereum) {
-  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-  //       setRide([]);
-  //       setLoading(true);
-  //       checkUser();
-  //       return;
-  //     });
-  //   }
-  // });
 
   useEffect(() => {
     if (user) return;
@@ -192,22 +181,16 @@ const AccountPage: NextPage = () => {
     // console.log(signer)
     const carContract = new ethers.Contract(contract, ABI, signer);
 
-    console.log(userAddress);
-    const isUser = await carContract.is_user(userAddress);
+    const [isUser, userInfo] = await Promise.all([
+      carContract.is_user(userAddress),
+      carContract.userInfo(userAddress)
+    ])
 
     if (!isUser) return "";
-
-    let userInfo = await carContract.userInfo(userAddress);
     setUserContactNumber(userInfo?.phone);
   };
 
-  // useEffect(()=> {
-  //   getUserInfo()
-  // })
 
-  //   const onSwitchNetwork = async () => {
-  //   await switchNetwork?.(chainId.polygonMumbai)
-  // }
   let user = ride?.traveller == address ? 1 : ride?.driver == address ? 2 : 0;
   let isActiveRide =
     ride?.traveller !== "0x0000000000000000000000000000000000000000";
@@ -242,10 +225,10 @@ const AccountPage: NextPage = () => {
         .then((tx: any) => {
           console.log("processing");
           provider.waitForTransaction(tx.hash).then(async () => {
-            let getUserActivities = await carContract.getUserActivities(
-              address
-            );
-            let isActiveRide = await carContract.isActiveRide(address);
+            const [getUserActivities, isActiveRide] = await Promise.all([
+              carContract.getUserActivities(address),
+              carContract.isActiveRide(address),
+            ]);
             setIsActiveRide(isActiveRide);
             SetUserActivities(getUserActivities);
             console.log("Ride Approved");
@@ -276,10 +259,10 @@ const AccountPage: NextPage = () => {
         .then((tx: any) => {
           console.log("processing");
           provider.waitForTransaction(tx.hash).then(async () => {
-            let getUserActivities = await carContract.getUserActivities(
-              address
-            );
-            let isActiveRide = await carContract.isActiveRide(address);
+            const [getUserActivities, isActiveRide] = await Promise.all([
+              carContract.getUserActivities(address),
+              carContract.isActiveRide(address),
+            ]);
             setIsActiveRide(isActiveRide);
             SetUserActivities(getUserActivities);
             console.log("Ride Cancelled");

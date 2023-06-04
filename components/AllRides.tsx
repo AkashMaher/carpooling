@@ -11,11 +11,19 @@ import Pagination from "./Pagination";
 
 import {
   useJsApiLoader,
-  GoogleMap,
-  Marker,
-  Autocomplete,
-  DirectionsRenderer,
 } from "@react-google-maps/api";
+
+type InitialActivityStateType = {
+  activity: ActivityType[] | undefined;
+  totalPages: number;
+  currentPage: number;
+};
+
+const INITIAL_ACTIVITY_STATE: InitialActivityStateType = {
+  activity: undefined,
+  totalPages: 1,
+  currentPage: 1,
+};
 
 const LIBRARIES: any = ["places"];
 const googleMapApiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY || "";
@@ -148,17 +156,6 @@ const ActivityItem: FC<{
   );
 };
 
-type InitialActivityStateType = {
-  activity: ActivityType[] | undefined;
-  totalPages: number;
-  currentPage: number;
-};
-
-const INITIAL_ACTIVITY_STATE: InitialActivityStateType = {
-  activity: undefined,
-  totalPages: 1,
-  currentPage: 1,
-};
 
 const AllRides: FC<{
   userActivities: ActivityType[];

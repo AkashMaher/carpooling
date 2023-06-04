@@ -21,13 +21,6 @@ import userContext from "../components/context/user";
 const DashboardPage: NextPage = () => {
   const { address, isConnected } = useAccount();
   const router = useRouter();
-  // const [Loading, setLoading] = useState(false);
-  // const [userInfo, setUserInfo] = useState<any>([]);
-
-  // const [isActiveRide, setIsActiveRide] = useState(false);
-  // const [userRole, setUserRole] = useState(0);
-  // const [userBalance, setUserBalance] = useState(0);
-  // const [userActivities, SetUserActivities] = useState<any>([]);
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
 
@@ -41,46 +34,6 @@ const DashboardPage: NextPage = () => {
     Loading,
     setLoading,
   } = useContext(userContext);
-  // const checkUser = async () => {
-  //   if (!isConnected) return router.push("./login");
-  //   if (userInfo?.name) return;
-  //   // let provider = new ethers.providers.Web3Provider(ethereum)
-  //   // const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
-
-  //   // const walletAddress = address; // first account in MetaMask
-  //   // const signer = provider.getSigner(walletAddress);
-
-  //   // // console.log(signer)
-  //   // const carContract = new ethers.Contract(contract, ABI, signer);
-
-  //   // const isUser = await carContract.is_user(address);
-  //   // if (!isUser) return router.push("./login");
-  //   // // console.log(isUser)
-  //   // let getUser = await carContract.userInfo(address);
-  //   // let isActiveRide = await carContract.isActiveRide(address);
-  //   // let balance = await carContract.balance(address);
-  //   // let getUserActivities = await carContract.getUserActivities(address);
-  //   setUserRole((getUser?.role).toNumber());
-  //   SetUserActivities(getUserActivities);
-  //   setUserBalance(balance.toNumber());
-  //   setIsActiveRide(isActiveRide);
-  //   setUserInfo(getUser);
-  //   setLoading(false);
-  // };
-
-  // useEffect(() => {
-  //   if (window.ethereum) {
-  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-  //       setLoading(true);
-  //       return;
-  //     });
-  //     return;
-  //   }
-  // });
-
-  // useEffect(() => {
-  //   checkUser();
-  // });
 
   const onSwitchNetwork = async () => {
     await switchNetwork?.(chainId.polygonMumbai);

@@ -5,15 +5,10 @@ import { useRouter } from "next/router";
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   useAccount,
-  useConnect,
-  useDisconnect,
   useSwitchNetwork,
   useNetwork,
   chainId,
 } from "wagmi";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { contract, ABI, RPC } from "../contracts";
-import { add } from "date-fns";
 import { opacityAnimation } from "../utils/animations";
 import Head from "next/head";
 
@@ -22,52 +17,9 @@ import userContext from "../components/context/user";
 const AccountPage: NextPage = () => {
   const { address, isConnected } = useAccount();
   const router = useRouter();
-  // const [userInfo, setUserInfo] = useState<any>([]);
-  // const [Loading, setLoading] = useState(false);
-  const { chain } = useNetwork();
-  const { switchNetwork } = useSwitchNetwork();
 
   const { userInfo, Loading } = useContext(userContext);
 
-  // console.log(user)
-  // const checkUser = async () => {
-  //   if (!isConnected) return router.push("./login");
-  //   if (userInfo?.name) return;
-  //   // // let provider = new ethers.providers.Web3Provider(ethereum)
-  //   // const provider = new ethers.providers.JsonRpcProvider(RPC.mumbai);
-
-  //   // const walletAddress = address; // first account in MetaMask
-  //   // const signer = provider.getSigner(walletAddress);
-
-  //   // // console.log(signer)
-  //   // const carContract = new ethers.Contract(contract, ABI, signer);
-
-  //   // const isUser = await carContract.is_user(address);
-  //   // if (!isUser) return router.push("./login");
-  //   // // console.log(isUser)
-  //   // let getUser = await carContract.userInfo(address);
-  //   setUserInfo(user);
-  //   setLoading(false);
-  // };
-
-  // useEffect(() => {
-  //   if (window.ethereum) {
-  //     (window as any).ethereum.on("accountsChanged", function (accounts: any) {
-  //       setUserInfo([]);
-  //       setLoading(true);
-  //       checkUser();
-  //       return;
-  //     });
-  //   }
-  // });
-
-  // useEffect(() => {
-  //   checkUser();
-  // });
-
-  const onSwitchNetwork = async () => {
-    await switchNetwork?.(chainId.polygonMumbai);
-  };
 
   let time = "";
   if (userInfo?.time) {
